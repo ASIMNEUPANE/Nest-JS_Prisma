@@ -14,3 +14,7 @@ Enable User Authentication
 Added Mailing SMTP service for Mailing using Nodemailer with handlebars for email templates
 Prisma Integration
 Integration Testing / Unit Testing using Jest [With Test DB Environment]
+
+
+Verioning
+VERSON_NEUTURAL belongs to every version

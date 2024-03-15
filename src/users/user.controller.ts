@@ -9,11 +9,12 @@ import {
   ParseIntPipe,
   HttpException,
   HttpStatus,
+  Version,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 
-@Controller('users')
+@Controller({path:'users', version:'1'}, )
 export class UserController {
   constructor(private userService: UserService) {}
 
