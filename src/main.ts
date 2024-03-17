@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
+import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
+  const logger = new Logger('bootstrap');
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
 
@@ -17,6 +19,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/', app, document);
-  await app.listen(3000);
+  const PORT = 3000
+  await app.listen(PORT);
+  logger.log(`app is running on port ${PORT} `)
 }
 bootstrap();
