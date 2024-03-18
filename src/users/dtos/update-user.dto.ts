@@ -29,7 +29,7 @@ export class ChangePasswordDto {
     description: 'Enter oldPassword of the user',
     example: 'Hellworld@2',
   })
-  Oldpassword: string;
+  oldPassword: string;
 
   @IsString()
   @IsNotEmpty()
@@ -38,7 +38,7 @@ export class ChangePasswordDto {
     description: 'Enter newPassword of the user',
     example: 'ExamplePass@2',
   })
-  NewPassword: string;
+  newPassword: string;
 }
 export class BlockUserDto {
   @IsBoolean()

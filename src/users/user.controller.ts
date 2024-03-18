@@ -41,7 +41,7 @@ export class UserController {
   }
   @Get(':id')
   getUserById(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.getUser();
+    return this.userService.getById(id);
   }
   @Put(':id')
   @UsePipes(new ValidationPipe())
@@ -52,7 +52,7 @@ export class UserController {
     return this.userService.updateById(id, updateByIdDto);
   }
 
-  @Put(':id')
+  @Put('change-password/:id')
   @UsePipes(new ValidationPipe())
   changePassword(
     @Param('id', ParseIntPipe) id: number,
@@ -60,12 +60,12 @@ export class UserController {
   ) {
     return this.userService.changePassword(
       id,
-      changePasswordDto.Oldpassword,
-      changePasswordDto.NewPassword,
+      changePasswordDto.oldPassword,
+      changePasswordDto.newPassword,
     );
   }
 
-  @Put(':id')
+  @Put('reset-password/:id')
   @UsePipes(new ValidationPipe())
   resetPassword(
     @Param('id', ParseIntPipe) id: number,
@@ -74,7 +74,7 @@ export class UserController {
     return this.userService.resetPassword(id, resetPasswordDto);
   }
 
-  @Put(':id')
+  @Put('block/:id')
   @UsePipes(new ValidationPipe())
   blockUser(
     @Param('id', ParseIntPipe) id: number,
@@ -82,7 +82,7 @@ export class UserController {
   ) {
     return this.userService.block(id, blockUserDto);
   }
-  @Put(':id')
+  @Put('archive/:id')
   @UsePipes(new ValidationPipe())
   deleteUser(
     @Param('id', ParseIntPipe) id: number,
