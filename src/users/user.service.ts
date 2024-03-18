@@ -3,7 +3,11 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BcryptPass } from 'utils/Bcrypt';
 import { CreateUserDto } from './dtos/CreateUser.dto';
-import { BlockUserDto, DeleteUserDto, ResetPasswordDto } from './dtos/update-user.dto';
+import {
+  BlockUserDto,
+  DeleteUserDto,
+  ResetPasswordDto,
+} from './dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -37,7 +41,7 @@ export class UserService {
   async getById(id: number) {
     return await this.prisma.user.findUnique({ where: { id } });
   }
-  async updateById(id:number, payload:Prisma.UserUpdateInput) {
+  async updateById(id: number, payload: Prisma.UserUpdateInput) {
     return await this.prisma.user.update({
       where: {
         id,
@@ -70,7 +74,7 @@ export class UserService {
     });
   }
 
-  async resetPassword(id: number, payload:ResetPasswordDto) {
+  async resetPassword(id: number, payload: ResetPasswordDto) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user)
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
@@ -82,7 +86,7 @@ export class UserService {
       data: { password: newPass },
     });
   }
-  async block(id: number, payload:BlockUserDto) {
+  async block(id: number, payload: BlockUserDto) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user)
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);

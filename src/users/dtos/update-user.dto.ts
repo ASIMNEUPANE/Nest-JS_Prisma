@@ -3,7 +3,6 @@ import { CreateUserDto } from './CreateUser.dto';
 import { IsBoolean, IsString, IsStrongPassword } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { Prisma } from '@prisma/client';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
@@ -12,9 +11,7 @@ export class UpdateByIdDto extends PickType(CreateUserDto, ['name'] as const) {
 }
 export class ResetPasswordDto extends PickType(CreateUserDto, [
   'password',
-] as const) {
-
-}
+] as const) {}
 export class ChangePasswordDto {
   @IsString()
   @IsNotEmpty()

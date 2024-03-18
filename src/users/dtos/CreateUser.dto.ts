@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsEmail, IsOptional, IsStrongPassword } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsStrongPassword,
+} from 'class-validator';
 import { Role } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -28,9 +34,13 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
+  @ApiProperty({
+    description: 'Images of the user',
+    example: 'Hellworld@2',
+  })
   images?: string;
 
-  @IsString() 
+  @IsString()
   @IsOptional()
   @ApiProperty({
     description: 'Array of roles associated with the user',
