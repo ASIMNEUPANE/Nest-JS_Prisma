@@ -11,32 +11,83 @@ import {
   HttpStatus,
   Version,
   Logger,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/CreateUser.dto';
+import {
+  UpdateUserDto,
+  UpdateByIdDto,
+  ChangePasswordDto,
+  ResetPasswordDto,
+  BlockUserDto,
+  DeleteUserDto,
+} from './dtos/update-user.dto';
+import { IsStrongPassword } from 'class-validator';
 
-@Controller({path:'users', version:'1'}, )
+@Controller({ path: 'users', version: '1' })
 export class UserController {
-  private logger = new Logger('User controller')
+  private logger = new Logger('User controller');
   constructor(private userService: UserService) {}
 
   @Post()
-  @UsePipes(ValidationPipe)
+  @UsePipes(new ValidationPipe())
   createUser(@Body() createUserDto: CreateUserDto) {
-    
     return this.userService.createUser(createUserDto);
   }
-
   @Get()
-  getUser() {
-    this.logger.verbose(`User ${this.getUser} and `)
+  getUsers() {
     return this.userService.getUser();
   }
   @Get(':id')
   getUserById(@Param('id', ParseIntPipe) id: number) {
-    const user = this.userService.getById(id);
-    if (!user)
-      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
-    return user;
+    return this.userService.getUser();
+  }
+  @Put(':id')
+  @UsePipes(new ValidationPipe())
+  updateUserById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateByIdDto: UpdateByIdDto,
+  ) {
+    return this.userService.updateById(id, updateByIdDto);
+  }
+
+  @Put(':id')
+  @UsePipes(new ValidationPipe())
+  changePassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.userService.changePassword(
+      id,
+      changePasswordDto.Oldpassword,
+      changePasswordDto.NewPassword,
+    );
+  }
+
+  @Put(':id')
+  @UsePipes(new ValidationPipe())
+  resetPassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ) {
+    return this.userService.resetPassword(id, resetPasswordDto);
+  }
+
+  @Put(':id')
+  @UsePipes(new ValidationPipe())
+  blockUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() blockUserDto: BlockUserDto,
+  ) {
+    return this.userService.block(id, blockUserDto);
+  }
+  @Put(':id')
+  @UsePipes(new ValidationPipe())
+  deleteUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() deleteUserDto: DeleteUserDto,
+  ) {
+    return this.userService.archive(id, deleteUserDto);
   }
 }

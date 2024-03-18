@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BcryptPass } from 'utils/Bcrypt';
 import { CreateUserDto } from './dtos/CreateUser.dto';
+import { BlockUserDto, DeleteUserDto, ResetPasswordDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -69,19 +70,19 @@ export class UserService {
     });
   }
 
-  async resetPassword(id: number, password: string) {
+  async resetPassword(id: number, payload:ResetPasswordDto) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user)
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
 
-    const newPass = await this.bcrpt.hashPassword(password);
+    const newPass = await this.bcrpt.hashPassword(payload.password);
 
     return await this.prisma.user.update({
       where: { id },
       data: { password: newPass },
     });
   }
-  async block(id: number, payload: { isActive: boolean }) {
+  async block(id: number, payload:BlockUserDto) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user)
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
@@ -91,7 +92,7 @@ export class UserService {
       data: { isActive: payload?.isActive },
     });
   }
-  async archive(id: number, payload: { isArchive: boolean }) {
+  async archive(id: number, payload: DeleteUserDto) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user)
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
