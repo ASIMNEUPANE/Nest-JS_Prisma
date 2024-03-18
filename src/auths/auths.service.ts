@@ -7,7 +7,7 @@ import { Prisma } from '@prisma/client';
 @Injectable()
 export class AuthsService {
   constructor(private prisma: PrismaService) {}
-  register(createAuthDto:Prisma.UserCreateInput ) {
+  register(createAuthDto: Prisma.UserCreateInput) {
     return this.prisma.user.create({ data: createAuthDto });
   }
 

@@ -49,7 +49,6 @@ export class UserController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiCreatedResponse({ type: UserEntity })
-  @UsePipes(new ValidationPipe())
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
@@ -90,7 +89,6 @@ export class UserController {
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @UsePipes(new ValidationPipe())
   updateUserById(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateByIdDto: UpdateByIdDto,
@@ -107,7 +105,6 @@ export class UserController {
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @UsePipes(new ValidationPipe())
   changePassword(
     @Param('id', ParseIntPipe) id: number,
     @Body() changePasswordDto: ChangePasswordDto,
@@ -128,7 +125,6 @@ export class UserController {
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @UsePipes(new ValidationPipe())
   resetPassword(
     @Param('id', ParseIntPipe) id: number,
     @Body() resetPasswordDto: ResetPasswordDto,
@@ -145,7 +141,6 @@ export class UserController {
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @UsePipes(new ValidationPipe())
   blockUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() blockUserDto: BlockUserDto,
@@ -162,7 +157,6 @@ export class UserController {
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @UsePipes(new ValidationPipe())
   deleteUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() deleteUserDto: DeleteUserDto,

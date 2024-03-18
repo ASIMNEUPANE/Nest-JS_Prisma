@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsStrongPassword,
   IsNotEmpty,
+  IsOptional,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class CreateAuthDto {
@@ -29,6 +30,6 @@ export class CreateAuthDto {
   })
   password: string;
 
-
-  images:string
+   @IsOptional()
+  images?:string
 }

@@ -24,7 +24,7 @@ export class AuthsController {
   constructor(private readonly authsService: AuthsService) {}
 
   @Post('register')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('images', {}))
   registerUser(
     @UploadedFile(
       new ParseFilePipe({
@@ -32,14 +32,18 @@ export class AuthsController {
           new FileTypeValidator({ fileType: 'image/jpeg' }),
           new MaxFileSizeValidator({ maxSize: 100000 }),
         ],
+        fileIsRequired: false,
       }),
     )
     file: Express.Multer.File,
     @Body() createUserDto: CreateAuthDto,
   ) {
-    const uniqueSuffix = Date.now() + '.' + file.originalname.split('.')[1];
+    if (file) {
+      const uniqueSuffix = Date.now() + '.' + file.originalname.split('.')[1];
 
-    createUserDto.images = uniqueSuffix;
+      createUserDto.images = uniqueSuffix;
+    }
+
     console.log(createUserDto);
 
     return this.authsService.register(createUserDto);
