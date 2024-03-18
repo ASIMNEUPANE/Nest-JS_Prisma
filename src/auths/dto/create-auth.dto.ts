@@ -28,4 +28,7 @@ export class CreateAuthDto {
     example: 'Hellworld@2',
   })
   password: string;
+
+
+  images:string
 }
