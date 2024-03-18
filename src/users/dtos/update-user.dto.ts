@@ -13,14 +13,7 @@ export class UpdateByIdDto extends PickType(CreateUserDto, ['name'] as const) {
 export class ResetPasswordDto extends PickType(CreateUserDto, [
   'password',
 ] as const) {
-  //   @IsString()
-  //   @IsNotEmpty()
-  //   @IsStrongPassword()
-  //   @ApiProperty({
-  //     description: 'Enter reset password of the user',
-  //     example: 'Hellworld@2',
-  //   })
-  //   password: string;
+
 }
 export class ChangePasswordDto {
   @IsString()
