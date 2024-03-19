@@ -16,10 +16,10 @@ import { BlogEntity } from './entities/blog.entity';
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
-  @Post()
-  create(@Body() createBlogDto: CreateBlogDto) {
-    return this.blogService.create(createBlogDto);
-  }
+  // @Post()
+  // create(@Body() createBlogDto: CreateBlogDto) {
+  //   return this.blogService.create(createBlogDto);
+  // }
 
   @Get()
   findAll() {

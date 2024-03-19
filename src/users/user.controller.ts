@@ -12,6 +12,7 @@ import {
   Version,
   Logger,
   Put,
+  UseGuards
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/CreateUser.dto';
@@ -24,6 +25,7 @@ import {
   DeleteUserDto,
 } from './dtos/update-user.dto';
 import {
+  
   ApiOkResponse,
   ApiTags,
   ApiCreatedResponse,
@@ -32,7 +34,12 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { RoleGuard } from 'src/auths/guards/role.guard';
 
+
+@ApiBearerAuth('access-token')
+@UseGuards( RoleGuard)
 @Controller({ path: 'users', version: '1' })
 @ApiTags('Users')
 export class UserController {
@@ -40,6 +47,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   // Creating user
+  @Roles('ADMIN')
   @Post()
   @ApiOperation({ summary: 'Create new user' })
   @ApiResponse({

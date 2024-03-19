@@ -17,7 +17,7 @@ CREATE TABLE "User" (
     "isActive" BOOLEAN NOT NULL DEFAULT false,
     "isArchive" BOOLEAN NOT NULL DEFAULT false,
     "images" TEXT,
-    "roles" "Role" NOT NULL DEFAULT 'USERS',
+    "roles" "Role"[] DEFAULT ARRAY['USERS']::"Role"[],
     "created_by" INTEGER NOT NULL DEFAULT 0,
     "updated_by" INTEGER NOT NULL DEFAULT 0,
 

@@ -8,9 +8,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class BlogService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createBlogDto: CreateBlogDto) {
-    return await this.prisma.blog.create({ data: createBlogDto  });
-  }
+  // async create(createBlogDto: CreateBlogDto) {
+  //   return await this.prisma.blog.create({ data: createBlogDto  });
+  // }
 
   findAll() {
     return `This action returns all blog`;

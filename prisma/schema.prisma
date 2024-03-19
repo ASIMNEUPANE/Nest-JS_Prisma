@@ -22,7 +22,7 @@ model User {
   isActive        Boolean @default(false)
   isArchive       Boolean @default(false)
   images          String?
-  roles           Role    @default(USERS)
+  roles           Role[]  @default([USERS])
   created_by      Int     @default(0)
   updated_by      Int     @default(0)
   Blogs           Blog[]
