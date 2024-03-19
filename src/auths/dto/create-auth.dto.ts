@@ -51,3 +51,15 @@ export class VerifyDto {
   })
   otp: string;
 }
+
+export class LogInReturnDto {
+  @ApiProperty()
+  user: {
+    name: string;
+    roles: string;
+    email: string;
+  };
+
+  @ApiProperty()
+  token: string;
+}

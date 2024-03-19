@@ -12,6 +12,14 @@ import {
   FileTypeValidator,
   MaxFileSizeValidator,
 } from '@nestjs/common';
+import {
+  ApiOkResponse,
+  ApiTags,
+  ApiCreatedResponse,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiOperation,
+} from '@nestjs/swagger';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthsService } from './auths.service';
@@ -20,10 +28,19 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 
 @Controller({ path: 'auths', version: '1' })
+@ApiTags('Auth')
 export class AuthsController {
   constructor(private readonly authsService: AuthsService) {}
 
   @Post('register')
+  @ApiOperation({ summary: 'Create new user' })
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: [CreateUserDto],
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  // @ApiCreatedResponse({ type: UserEntity })
   @UseInterceptors(FileInterceptor('images', {}))
   registerUser(
     @UploadedFile(
@@ -50,8 +67,8 @@ export class AuthsController {
   }
 
   @Post('verify')
-  verify(@Body() verifyDto : VerifyDto){
-
+  verify(@Body() verifyDto: VerifyDto) {
+    
   }
 
   // @Get(':id')

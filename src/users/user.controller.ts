@@ -34,7 +34,7 @@ import {
 import { UserEntity } from './entities/user.entity';
 
 @Controller({ path: 'users', version: '1' })
-@ApiTags('users')
+@ApiTags('Users')
 export class UserController {
   private logger = new Logger('User controller');
   constructor(private userService: UserService) {}
@@ -45,10 +45,10 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The found record',
-    type: [CreateUserDto],
+    type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @ApiCreatedResponse({ type: UserEntity })
+  // @ApiCreatedResponse({ type: UserEntity })
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
@@ -62,7 +62,7 @@ export class UserController {
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @ApiOkResponse({ type: UserEntity, isArray: true })
+  // @ApiOkResponse({ type: UserEntity, isArray: true })
   getUsers() {
     return this.userService.getUser();
   }
