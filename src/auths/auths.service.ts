@@ -4,33 +4,48 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { BcryptPass } from 'src/utils/Bcrypt';
-import { generateOTP } from 'src/utils/otp';
+import { generateOTP, verifyOTP } from 'src/utils/otp';
 import { mailer } from 'src/utils/mailer';
 @Injectable()
 export class AuthsService {
   constructor(
     private prisma: PrismaService,
-    private  bcrypt: BcryptPass,
+    private bcrypt: BcryptPass,
   ) {}
 
   async register(createAuthDto: Prisma.UserCreateInput) {
-    let { isActive, isEmailVerified, roles, password, ...rest } = createAuthDto as {
-      password: string;
-      [key: string]: any;
-    };
+    let { isActive, isEmailVerified, roles, password, ...rest } =
+      createAuthDto as {
+        password: string;
+        [key: string]: any;
+      };
     rest.password = await this.bcrypt.hashPassword(password);
     const user = await this.prisma.user.create({
       data: rest as Prisma.UserUncheckedCreateInput,
     });
     const token = generateOTP();
-    const authUSer = { email: user.email, otp: token }; 
+    const authUSer = { email: user.email, otp: token };
     await this.prisma.auth.create({ data: authUSer });
     await mailer(user?.email, token);
     return user;
   }
 
-  findAll() {
-    return `This action returns all auths`;
+  async verify(payload: Prisma.AuthCreateInput) {
+    const { email, otp } = payload;
+    const auth = await this.prisma.auth.findUnique({ where: { email: email } });
+    if (!auth) throw new Error('User is not available');
+    const isValidToken = await verifyOTP(otp);
+    if (!isValidToken) throw new Error('Token Expired');
+    const emailValid = auth?.otp === otp;
+    if (!emailValid) throw new Error('Token mismatch');
+
+    const user = await this.prisma.user.update({
+      where: { email: email },
+      data: { isEmailVerified: true, isActive: true },
+    });
+
+    await this.prisma.auth.delete({ where: { email: email } });
+    return user;
   }
 
   findOne(id: number) {

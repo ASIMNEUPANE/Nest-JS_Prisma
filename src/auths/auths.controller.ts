@@ -15,7 +15,7 @@ import {
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthsService } from './auths.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { CreateAuthDto, VerifyDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 
@@ -49,10 +49,10 @@ export class AuthsController {
     return this.authsService.register(createUserDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.authsService.findAll();
-  // }
+  @Post('verify')
+  verify(@Body() verifyDto : VerifyDto){
+
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {

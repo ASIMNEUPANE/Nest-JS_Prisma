@@ -30,6 +30,24 @@ export class CreateAuthDto {
   })
   password: string;
 
-   @IsOptional()
-  images?:string
+  @IsOptional()
+  images?: string;
+}
+
+export class VerifyDto {
+  @IsEmail()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Email of the user',
+    example: 'john@doe.com',
+  })
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Otp of the user',
+    example: '134684',
+  })
+  otp: string;
 }
