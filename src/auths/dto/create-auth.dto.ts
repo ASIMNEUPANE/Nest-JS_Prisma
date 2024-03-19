@@ -52,6 +52,58 @@ export class VerifyDto {
   otp: string;
 }
 
+export class LoginDto {
+  @IsEmail()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Email of the user',
+    example: 'john@doe.com',
+  })
+  email: string;
+
+  @IsString()
+  @ApiProperty({
+    description: 'Password of the user',
+    example: 'Hellworld@2',
+  })
+  password: string;
+}
+export class GenerateFPTokenDto {
+  @IsEmail()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Email of the user',
+    example: 'john@doe.com',
+  })
+  email: string;
+}
+export class ForgetPassowrdDto {
+  @IsEmail()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Email of the user',
+    example: 'john@doe.com',
+  })
+  email: string;
+
+  @IsString()
+  @ApiProperty({
+    description: 'Otp of the forgetPassword',
+    example: 'Hellworld@2',
+  })
+  otp: string;
+
+  @IsString()
+  @IsStrongPassword()
+  @ApiProperty({
+    description: 'Password of the user',
+    example: 'Hellworld@2',
+  })
+  password: string;
+}
+
 export class LogInReturnDto {
   @ApiProperty()
   user: {
@@ -62,4 +114,8 @@ export class LogInReturnDto {
 
   @ApiProperty()
   token: string;
+}
+export class ReturnTrueDto {
+  @ApiProperty()
+  success: boolean;
 }
