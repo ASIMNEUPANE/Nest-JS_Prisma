@@ -128,7 +128,7 @@ export class AuthsController {
     return this.authsService.generateFPToken(generateFPTokenDto.email);
   }
   // Forget Password
-  @Post('forgetPassowrd')
+  @Post('forget-passowrd')
   @ApiOperation({ summary: 'generateFPToken user' })
   @ApiResponse({
     status: 200,

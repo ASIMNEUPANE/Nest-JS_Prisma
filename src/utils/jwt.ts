@@ -1,24 +1,22 @@
-import JWT from "jsonwebtoken";
-import crypto from 'crypto'
+import * as jwt from 'jsonwebtoken';
 
-const generateJWT = (payload: { [key: string]: any }) => {
-  return JWT.sign(
+export const generateJWT = (payload: {}) => {
+  console.log(jwt)
+  return jwt.sign(
     {
       data: payload,
     },
-    process.env.JWT_SECRET || "",
-    { expiresIn: process.env.JWT_DURATION }
+    process.env.JWT_SECRET || '',
+    { expiresIn: process.env.JWT_DURATION },
   );
 };
 
-const verifyJWT = (token: string) => {
+export const verifyJWT = (token: string) => {
   try {
-    return JWT.verify(token, process.env.JWT_SECRET);
+    return jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
-    throw new Error("Token is invalid");
+    throw new Error('Token is invalid');
   }
 };
-const generateRandomToken = () => {
-  return crypto.randomInt(100000, 999999);
-};
-export  { generateJWT, verifyJWT,generateRandomToken };
+
+
