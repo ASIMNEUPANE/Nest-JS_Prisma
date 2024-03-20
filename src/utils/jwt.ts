@@ -13,6 +13,7 @@ export const generateJWT = (payload: {}) => {
 
 export const verifyJWT = (token: string) => {
   try {
+    console.log(token,'tokennnnnnnnnnnnnn===============')
     return jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
     throw new Error('Token is invalid');

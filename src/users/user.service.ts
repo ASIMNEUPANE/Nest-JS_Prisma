@@ -21,7 +21,7 @@ export class UserService {
   ): Promise<Prisma.UserCreateInput | null> {
     let { password, ...rest } = payload as {
       password: string;
-      roles?: string;
+      roles?: string[];
       [key: string]: any;
     };
     rest.password = await this.bcrpt.hashPassword(password);

@@ -20,7 +20,7 @@ export class UserEntity implements User {
   password: string;
 
   @ApiProperty()
-  roles: Role;
+  roles: Role[];
 
   @ApiProperty()
   images: string;

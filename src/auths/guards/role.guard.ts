@@ -1,21 +1,42 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-
+import { Role } from 'src/users/entities/role.enum';
+import { verifyJWT } from 'src/utils/jwt';
+import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class RoleGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private readonly prisma: PrismaService,
+  ) {}
 
-  matchRoles(roles: string[], userRole: string[]): boolean {
-    return roles.some(role => userRole?.includes(role));
-  }
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const roles = this.reflector.getAllAndOverride<Role[]>('roles', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
-  canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
     if (!roles) {
       return true;
     }
     const request = context.switchToHttp().getRequest();
-    const user = request.user;
-    return this.matchRoles(roles, user.roles);
+
+    console.log(request.headers.authorization);
+
+    const token = request?.headers?.authorization;
+    if (!token) throw new Error('Access token required');
+    const accessToken = token.split('Bearer ')[1];
+    const { data } = verifyJWT(accessToken) as any;
+    if (!data) throw new Error('Data is not available');
+    const { email } = data;
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) throw new Error('User not found');
+    (request as any).currentUser = user?.id;
+    (request as any).currentUserName = user?.name;
+    (request as any).currentRoles = user?.roles;
+    const isValidRole = roles.some((role) => user.roles.includes(role as any));
+    if (!isValidRole) throw new Error('User unauthorized');
+
+    return isValidRole;
   }
 }

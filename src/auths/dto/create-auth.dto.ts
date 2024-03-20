@@ -108,7 +108,7 @@ export class LogInReturnDto {
   @ApiProperty()
   user: {
     name: string;
-    roles: string;
+    roles: string[];
     email: string;
   };
 

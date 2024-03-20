@@ -46,5 +46,5 @@ export class CreateUserDto {
     description: 'Array of roles associated with the user',
     example: '["USERS"]',
   })
-  roles?: Role;
+  roles?: string[];
 }
