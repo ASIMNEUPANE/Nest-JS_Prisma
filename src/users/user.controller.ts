@@ -56,7 +56,6 @@ export class UserController {
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @ApiCreatedResponse({ type: UserEntity })
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
@@ -71,7 +70,6 @@ export class UserController {
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @ApiOkResponse({ type: UserEntity, isArray: true })
   getUsers() {
     return this.userService.getUser();
   }
