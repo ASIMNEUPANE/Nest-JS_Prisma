@@ -5,6 +5,7 @@
 
 # images
 public/user/*
+public/blog/*
 
 # Logs
 logs
