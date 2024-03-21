@@ -7,13 +7,19 @@ import { VersioningType } from '@nestjs/common';
 async function bootstrap() {
   const logger = new Logger('bootstrap');
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
 
-  app.enableVersioning({
+  app.setGlobalPrefix('api').enableVersioning({
     type: VersioningType.URI,
+    defaultVersion: '1',
   });
-  app.useGlobalPipes(new ValidationPipe());
-
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   const config = new DocumentBuilder()
     .setTitle('Versioning example')
     .setDescription('The Api description')
@@ -21,8 +27,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/', app, document);
-  const PORT = 3000
+  const PORT = 3000;
   await app.listen(PORT);
-  logger.log(`app is running on port ${PORT} `)
+  logger.log(`app is running on port ${PORT} `);
 }
 bootstrap();
