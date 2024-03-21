@@ -50,7 +50,7 @@ model Blog {
   status      Status   @default(DRAFT)
   totalWord   Int
   images      String?
-  created_By  User     @relation(fields: [author], references: [name])
+  created_By  User?     @relation(fields: [author], references: [name])
   author      String
 
   @@index([status, title])
