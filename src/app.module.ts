@@ -10,8 +10,12 @@ import { PrismaService } from './prisma/prisma.service';
 // import { BlogModule } from './blog/blog.module';
 
 @Module({
-  imports: [UserModule, AuthsModule, ],
+  imports: [UserModule, AuthsModule],
   controllers: [],
-  providers: [{provide:APP_GUARD, useClass: RoleGuard}, PrismaService],
+  providers: [
+    { provide: APP_GUARD, useClass: RoleGuard },
+    PrismaService,
+    ,
+  ],
 })
 export class AppModule {}

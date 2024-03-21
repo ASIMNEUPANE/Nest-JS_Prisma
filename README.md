@@ -18,3 +18,57 @@ Integration Testing / Unit Testing using Jest [With Test DB Environment]
 
 Verioning
 VERSON_NEUTURAL belongs to every version
+
+
+
+
+
+
+
+
+  // Register User
+  // @Post('register')
+  // @ApiOperation({ summary: 'Create new user' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'The found record',
+  //   type: [AuthEntity],
+  // })
+  // @ApiResponse({ status: 403, description: 'Forbidden.' })
+  // @UseInterceptors(
+  //   FileInterceptor('images', {
+  //     storage: diskStorage({
+  //       destination: './public/user',
+  //       filename: (req, file, cb) => {
+  //         // Generating a unique filename
+  //         const uniqueSuffix =
+  //           Date.now() + '-' + Math.round(Math.random() * 1e9);
+  //         const extension = file.originalname.split('.').pop();
+  //         cb(null, `${uniqueSuffix}.${extension}`);
+  //       },
+  //     }),
+  //   }),
+  // )
+  // registerUser(
+  //   @UploadedFile(
+  //     new ParseFilePipe({
+  //       validators: [
+  //         new FileTypeValidator({ fileType: 'image/jpeg' }),
+  //         new MaxFileSizeValidator({ maxSize: 100000 }),
+  //       ],
+  //       fileIsRequired: false,
+  //     }),
+  //   )
+  //   file: Express.Multer.File,
+  //   @Body() createUserDto: CreateAuthDto,
+  // ) {
+  //   if (file) {
+  //     const uniqueSuffix = Date.now() + '.' + file.originalname.split('.')[1];
+
+  //     createUserDto.images = uniqueSuffix;
+  //   }
+
+  //   console.log(createUserDto);
+
+  //   return this.authsService.register(createUserDto);
+  // }

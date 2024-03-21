@@ -35,11 +35,16 @@ import {
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { AuthEntity } from './entities/auth.entity';
+import { diskStorage } from 'multer';
+import { FileUploadService } from '../utils/file-upload.service';
 
 @Controller({ path: 'auths', version: '1' })
 @ApiTags('Auth')
 export class AuthsController {
-  constructor(private readonly authsService: AuthsService) {}
+  constructor(
+    private readonly authsService: AuthsService,
+    private readonly fileUploadService: FileUploadService,
+  ) {}
 
   // Register User
   @Post('register')
@@ -50,8 +55,20 @@ export class AuthsController {
     type: [AuthEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  // @ApiCreatedResponse({ type: UserEntity })
-  @UseInterceptors(FileInterceptor('images', {}))
+  @UseInterceptors(
+    FileInterceptor('images', {
+      storage: diskStorage({
+        destination: './public/user',
+        filename: (req, file, cb) => {
+          // Generating a unique filename
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const extension = file.originalname.split('.').pop();
+          cb(null, `${uniqueSuffix}.${extension}`);
+        },
+      }),
+    }),
+  )
   registerUser(
     @UploadedFile(
       new ParseFilePipe({
@@ -77,6 +94,8 @@ export class AuthsController {
   }
 
   // Verify User
+
+
   @Post('verify')
   @ApiOperation({ summary: 'Verify register user' })
   @ApiResponse({

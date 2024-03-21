@@ -8,6 +8,6 @@ import { BcryptPass } from 'src/utils/Bcrypt';
   imports: [PrismaModule],
 
   controllers: [AuthsController],
-  providers: [AuthsService,BcryptPass],
+  providers: [AuthsService, BcryptPass],
 })
 export class AuthsModule {}
