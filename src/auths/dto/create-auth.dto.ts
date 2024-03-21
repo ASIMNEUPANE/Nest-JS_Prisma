@@ -16,6 +16,7 @@ export class CreateAuthDto {
   name: string;
 
   @IsEmail()
+  @IsNotEmpty()
   @ApiProperty({
     description: 'Email of the user',
     example: 'john@doe.com',
@@ -23,6 +24,7 @@ export class CreateAuthDto {
   email: string;
 
   @IsString()
+  @IsNotEmpty()
   @IsStrongPassword()
   @ApiProperty({
     description: 'Password of the user',
