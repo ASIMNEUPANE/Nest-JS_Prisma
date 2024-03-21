@@ -37,7 +37,7 @@ import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { AuthEntity } from './entities/auth.entity';
 import { diskStorage } from 'multer';
 
-@Controller({ path: 'auths', version: '1' })
+@Controller('auths')
 @ApiTags('Auth')
 export class AuthsController {
   constructor(
