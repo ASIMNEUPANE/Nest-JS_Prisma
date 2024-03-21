@@ -21,9 +21,6 @@ export class RoleGuard implements CanActivate {
       return true;
     }
     const request = context.switchToHttp().getRequest();
-
-    console.log(request.headers.authorization);
-
     const token = request?.headers?.authorization;
     if (!token)
       throw new HttpException('Access token required', HttpStatus.BAD_REQUEST);
