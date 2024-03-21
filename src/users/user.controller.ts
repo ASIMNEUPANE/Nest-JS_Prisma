@@ -36,7 +36,6 @@ import {
 import { UserEntity } from './entities/user.entity';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { RoleGuard } from 'src/auths/guards/role.guard';
-import { Role } from './entities/role.enum';
 
 @ApiBearerAuth('access-token')
 @UseGuards(RoleGuard)
@@ -48,7 +47,7 @@ export class UserController {
 
   // Creating user
   @Post()
-  @Roles(Role.ADMIN)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'Create new user' })
   @ApiResponse({
     status: 200,
@@ -62,7 +61,7 @@ export class UserController {
 
   // Get all user
   @Get()
-  @Roles(Role.ADMIN)
+  @Roles('ADMIN')
   @ApiOperation({ summary: 'List all user' })
   @ApiResponse({
     status: 200,

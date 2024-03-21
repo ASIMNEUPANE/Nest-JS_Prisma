@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-
+import { HttpException, HttpStatus } from '@nestjs/common';
 export const generateJWT = (payload: {}) => {
   console.log(jwt)
   return jwt.sign(
@@ -13,10 +13,9 @@ export const generateJWT = (payload: {}) => {
 
 export const verifyJWT = (token: string) => {
   try {
-    console.log(token,'tokennnnnnnnnnnnnn===============')
     return jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
-    throw new Error('Token is invalid');
+    throw new HttpException('token is expire', HttpStatus.BAD_REQUEST);
   }
 };
 
