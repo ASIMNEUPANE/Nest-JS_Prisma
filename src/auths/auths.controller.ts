@@ -36,14 +36,12 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { AuthEntity } from './entities/auth.entity';
 import { diskStorage } from 'multer';
-import { FileUploadService } from '../utils/file-upload.service';
 
 @Controller({ path: 'auths', version: '1' })
 @ApiTags('Auth')
 export class AuthsController {
   constructor(
     private readonly authsService: AuthsService,
-    private readonly fileUploadService: FileUploadService,
   ) {}
 
   // Register User

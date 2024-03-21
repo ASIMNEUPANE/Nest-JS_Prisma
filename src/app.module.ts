@@ -15,7 +15,7 @@ import { PrismaService } from './prisma/prisma.service';
   providers: [
     { provide: APP_GUARD, useClass: RoleGuard },
     PrismaService,
-    ,
+    
   ],
 })
 export class AppModule {}
