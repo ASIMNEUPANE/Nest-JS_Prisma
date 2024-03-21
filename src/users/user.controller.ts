@@ -39,7 +39,7 @@ import { RoleGuard } from 'src/auths/guards/role.guard';
 
 @ApiBearerAuth('access-token')
 @UseGuards(RoleGuard)
-@Controller({ path: 'users', version: '1' })
+@Controller('users')
 @ApiTags('Users')
 export class UserController {
   private logger = new Logger('User controller');
