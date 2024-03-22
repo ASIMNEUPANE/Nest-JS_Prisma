@@ -4,7 +4,6 @@ import {
   IsString,
   IsOptional,
   IsInt,
-  IsEnum,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -65,6 +64,7 @@ export class CreateBlogDto {
   @IsOptional()
   images?: string;
 
+  @IsString()
   @IsOptional()
   author: string;
 }

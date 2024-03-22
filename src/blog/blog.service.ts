@@ -1,16 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { Prisma } from '@prisma/client';
-import { BlogEntity } from './entities/blog.entity';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Iblog, getReturn } from './blog.type';
 
 @Injectable()
 export class BlogService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createBlogDto: CreateBlogDto) {
+  async create(createBlogDto: CreateBlogDto): Promise<Iblog> {
     return await this.prisma.blog.create({ data: createBlogDto });
   }
 
