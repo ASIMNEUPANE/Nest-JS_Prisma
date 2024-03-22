@@ -15,12 +15,12 @@ export class BlogService {
   }
 
   async findAll(
-    limit: number,
-    page: number,
-    search: { title?: string; author?: string },
+    limit?: number,
+    page?: number,
+    search?: { title?: string; author?: string },
   ): Promise<getReturn> {
-    const pageNum = page || 1;
-    const size = limit || 4;
+    const pageNum = page;
+    const size = limit;
 
     const whereCondition: any = {
       status: 'Published',
@@ -60,6 +60,7 @@ export class BlogService {
   }
 
   async deleteById(id: number) {
-    return await this.prisma.blog.delete({ where: { id } });
+    await this.prisma.blog.delete({ where: { id } });
+    return 'deleted succesfully';
   }
 }

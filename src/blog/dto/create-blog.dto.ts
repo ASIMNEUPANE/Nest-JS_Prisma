@@ -1,5 +1,11 @@
 import { Category, Status, User } from '@prisma/client';
-import { IsNotEmpty, IsString, IsOptional, IsInt, IsEnum } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  IsInt,
+  IsEnum,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBlogDto {
@@ -48,7 +54,6 @@ export class CreateBlogDto {
     description: 'status of the blog',
     example: 'Nepal the great',
   })
-  
   @IsOptional()
   status?: Status;
 
@@ -62,17 +67,22 @@ export class CreateBlogDto {
 
   @IsOptional()
   author: string;
-
-
 }
 
-export class GetBlogDto{
-    
-    @IsOptional()
-    @IsString()
-    title:string
-    
-    @IsOptional()
-    @IsString()
-    author:string
+export class GetBlogDto {
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    description: 'title of the blog',
+    example: 'Nepal the great',
+  })
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    description: 'name of the author',
+    example: 'asim_neupane',
+  })
+  author: string;
 }

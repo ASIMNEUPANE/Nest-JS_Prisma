@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {  Blog, Category, Status, User } from '@prisma/client';
+import { Blog, Category, Status, User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
 export class BlogEntity implements Blog {
@@ -37,4 +37,9 @@ export class BlogEntity implements Blog {
 
   @ApiProperty()
   author: string;
+}
+
+export class DeleteEntity {
+  @ApiProperty()
+  return: 'success';
 }
