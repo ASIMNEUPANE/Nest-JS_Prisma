@@ -1,23 +1,21 @@
+import { Category, Status, User } from '@prisma/client';
 
+export type getReturn = {
+  data: any[];
+  total: number;
+  limit: number;
+  page: number;
+};
 
-export type getReturn= {
-    data: any[];
-    total: number;
-    limit: number;
-    page: number;
-}
-
-export interface Iblog  {
+export interface Iblog {
     id: number;
     title: string;
     content: string;
     description: string;
-    category: string;
-    status: string;
-     author: string;
+    category: Category;
+    status: Status;
     totalWord: number;
-    images: string;
-    createdAt: Date;
-    updatedAt: Date;
-    timestamps: boolean;
-  }
+    images?: string | null;
+    created_By?: User | null;
+    author: string;
+}
