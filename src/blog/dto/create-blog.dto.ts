@@ -65,3 +65,14 @@ export class CreateBlogDto {
 
 
 }
+
+export class GetBlogDto{
+    
+    @IsOptional()
+    @IsString()
+    title:string
+    
+    @IsOptional()
+    @IsString()
+    author:string
+}
