@@ -252,5 +252,68 @@ describe('AuthsService', () => {
       );
       expect(JWT.generateJWT).toHaveBeenCalledWith(mockPayload);
     });
+    it('should thow an error if user not founf', async () => {
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
+      await expect(() =>
+        service.login('asimneupane11@gmail.com', 'Helloworld@2'),
+      ).rejects.toThrow(
+        new HttpException('User is not available', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email: expectedResult.email },
+      });
+    });
+    it('should thow an error if email is not verified', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue({ ...expectedResult, isEmailVerified: false });
+      await expect(() =>
+        service.login('asimneupane11@gmail.com', 'Helloworld@2'),
+      ).rejects.toThrow(
+        new HttpException('Email is not verified yet', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email: expectedResult.email },
+      });
+    });
+    it('should thow an error if user is not active', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue({ ...expectedResult, isActive: false });
+      await expect(() =>
+        service.login('asimneupane11@gmail.com', 'Helloworld@2'),
+      ).rejects.toThrow(
+        new HttpException(
+          'User is not active . Please contact admin',
+          HttpStatus.BAD_REQUEST,
+        ),
+      );
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email: expectedResult.email },
+      });
+    });
+    it('should thow an error if user or password is incorrect', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue(expectedResult);
+      jest
+        .spyOn(BcryptPass.prototype, 'comparePasswords')
+        .mockResolvedValue(false);
+      await expect(() =>
+        service.login('asimneupane11@gmail.com', 'Helloworld@2'),
+      ).rejects.toThrow(
+        new HttpException(
+          'User or password is incorrect',
+          HttpStatus.BAD_REQUEST,
+        ),
+      );
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email: expectedResult.email },
+      });
+      expect(BcryptPass.prototype.comparePasswords).toHaveBeenCalledWith(
+        'Helloworld@2',
+        'hashPassword',
+      );
+    });
   });
 });
