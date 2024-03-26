@@ -136,9 +136,50 @@ describe('AuthsService', () => {
     });
     it('should throw an error if user not found', async () => {
       jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(null);
-   await expect(() => service.verify(authData)).rejects.toThrow(
-    new HttpException('User is not available', HttpStatus.BAD_REQUEST)
-  );
+      await expect(() => service.verify(authData)).rejects.toThrow(
+        new HttpException('User is not available', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: 'asimneupane11@gmail.com' },
+      });
+    });
+    it('should throw an error if OTP is expired', async () => {
+      jest
+        .spyOn(prismaService.auth, 'findUnique')
+        .mockResolvedValue(authDbdata);
+      jest.spyOn(OTP, 'verifyOTP').mockResolvedValue(false);
+
+      await expect(() => service.verify(authData)).rejects.toThrow(
+        new HttpException('Token Expired', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
+    });
+    it('should throw an error if token is missmatch', async () => {
+      // Mock payload with valid email but invalid token (expired)
+
+      // Mock authModel.findOne to return a user
+      const fakeData = {
+        email: registerData.email,
+        otp: '654321',
+      };
+      jest
+        .spyOn(prismaService.auth, 'findUnique')
+        .mockResolvedValue(authDbdata);
+
+      // Mock verifyOTP to return false, simulating token expiration
+      jest.spyOn(OTP, 'verifyOTP').mockResolvedValue(true);
+
+      // Call the verify function with the payload
+      await expect(() => service.verify(fakeData)).rejects.toThrow(
+        new HttpException('Token mismatch', HttpStatus.BAD_REQUEST),
+      );
+      // Assertion: Ensure that the function throws an error with the correct message
+      expect(OTP.verifyOTP).toHaveBeenCalledWith('123456');
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
     });
   });
 });
