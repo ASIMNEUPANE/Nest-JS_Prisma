@@ -6,35 +6,35 @@ import { PrismaService } from '../prisma/prisma.service';
 
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-const UserArray =[ 
+const UserArray = [
   {
-  id: 1,
-  name: 'Asim Neupane',
-  email: 'asimneupane11@gmail.com',
-  password: 'hashPassword',
-  isEmailVerified: true,
-  isActive: true,
-  isArchive: false,
-  images: 'https://example.com/profile.jpg',
-  roles: [Role.ADMIN],
-  created_by: 2,
-  updated_by: 2,
-  Blogs: [],
-},
+    id: 1,
+    name: 'Asim Neupane',
+    email: 'asimneupane11@gmail.com',
+    password: 'hashPassword',
+    isEmailVerified: true,
+    isActive: true,
+    isArchive: false,
+    images: 'https://example.com/profile.jpg',
+    roles: [Role.ADMIN],
+    created_by: 2,
+    updated_by: 2,
+    Blogs: [],
+  },
   {
-  id: 2,
-  name: 'new user',
-  email: 'newuser@gmail.com',
-  password: 'hashPassword',
-  isEmailVerified: true,
-  isActive: true,
-  isArchive: false,
-  images: 'https://example.com/profile.jpg',
-  roles: [Role.ADMIN],
-  created_by: 2,
-  updated_by: 2,
-  Blogs: [],
-},
+    id: 2,
+    name: 'new user',
+    email: 'newuser@gmail.com',
+    password: 'hashPassword',
+    isEmailVerified: true,
+    isActive: true,
+    isArchive: false,
+    images: 'https://example.com/profile.jpg',
+    roles: [Role.ADMIN],
+    created_by: 2,
+    updated_by: 2,
+    Blogs: [],
+  },
 ];
 
 const registerData = {
@@ -81,9 +81,7 @@ describe('BlogService', () => {
       jest
         .spyOn(BcryptPass.prototype, 'hashPassword')
         .mockResolvedValue('hashPassword');
-      jest
-        .spyOn(prismaService.user, 'create')
-        .mockResolvedValue(UserArray[0]);
+      jest.spyOn(prismaService.user, 'create').mockResolvedValue(UserArray[0]);
       const result = await service.createUser(registerData);
       expect(result).toEqual(UserArray[0]);
       expect(BcryptPass.prototype.hashPassword).toHaveBeenCalledWith(
@@ -99,32 +97,126 @@ describe('BlogService', () => {
       });
     });
   });
-  describe('getUser',()=>{
-    it('should return a user',async()=>{
-        // Mock input data
-        const limit = 1;
-        const page = 1;
-        const search = { roles:'ADMIN' };
-  
-        // Mock PrismaService calls
-        const totalCount = 3;
-        const paginatedData = [UserArray[0], UserArray[1]];
-  
-        jest.spyOn(prismaService.user, 'count').mockResolvedValue(totalCount);
-        jest
-          .spyOn(prismaService.user, 'findMany')
-          .mockResolvedValue(paginatedData);
-  
-        // Execute the method
-        const result = await service.getUser(limit, page, search);
-        console.log(result, '==========');
-        // Verify the result
-        expect(result).toEqual({
-          data: paginatedData,
-          total: totalCount,
-          limit,
-          page,
-        })
-    })
-  })
+  describe('getUser', () => {
+    it('should return a user', async () => {
+      // Mock input data
+      const limit = 1;
+      const page = 1;
+      const search = { roles: 'ADMIN' };
+
+      // Mock PrismaService calls
+      const totalCount = 3;
+      const paginatedData = [UserArray[0], UserArray[1]];
+
+      jest.spyOn(prismaService.user, 'count').mockResolvedValue(totalCount);
+      jest
+        .spyOn(prismaService.user, 'findMany')
+        .mockResolvedValue(paginatedData);
+
+      // Execute the method
+      const result = await service.getUser(limit, page, search);
+      console.log(result, '==========');
+      // Verify the result
+      expect(result).toEqual({
+        data: paginatedData,
+        total: totalCount,
+        limit,
+        page,
+      });
+    });
+  });
+  describe('getById', () => {
+    it('should get the user by id', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue(UserArray[0]);
+      const result = await service.getById(1);
+      expect(result).toEqual(UserArray[0]);
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { id: 1 },
+      });
+    });
+  });
+
+  describe('updateById', () => {
+    it('should update a user by id', async () => {
+      jest.spyOn(prismaService.user, 'update').mockResolvedValue(UserArray[0]);
+      const result = await service.updateById(UserArray[0].id, {
+        name: 'Asim Neupane',
+      });
+      expect(result).toEqual(UserArray[0]);
+      expect(prismaService.user.update).toHaveBeenCalledWith({
+        where: { id: UserArray[0].id },
+        data: {
+          name: 'Asim Neupane',
+        },
+      });
+    });
+  });
+
+  describe('changePassword', () => {
+    it('should change password', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue(UserArray[0]);
+      jest
+        .spyOn(BcryptPass.prototype, 'comparePasswords')
+        .mockResolvedValue(true);
+      jest
+        .spyOn(BcryptPass.prototype, 'hashPassword')
+        .mockResolvedValue('hashPassword');
+      jest.spyOn(prismaService.user, 'update').mockResolvedValue(UserArray[0]);
+
+      const result = await service.changePassword(
+        1,
+        'oldPassword',
+        'newPassword',
+      );
+      expect(result).toEqual(UserArray[0]);
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { id: 1 },
+      });
+      expect(BcryptPass.prototype.comparePasswords).toHaveBeenCalledWith(
+        'oldPassword',
+        'hashPassword',
+      );
+      expect(BcryptPass.prototype.hashPassword).toHaveBeenCalledWith(
+        'newPassword',
+      );
+      expect(prismaService.user.update).toHaveBeenCalledWith({
+        where: { id: UserArray[0].id },
+        data: { password: 'hashPassword' },
+      });
+    });
+    it('should throw an error if user is not found', async () => {
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
+      await expect(() =>
+        service.changePassword(1, 'oldPassword', 'newPassword'),
+      ).rejects.toThrow(
+        new HttpException('User not found', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { id: 1 },
+      });
+    });
+    it('should throw an error if user is not found', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue(UserArray[0]);
+      jest
+        .spyOn(BcryptPass.prototype, 'comparePasswords')
+        .mockResolvedValue(false);
+      await expect(() =>
+        service.changePassword(1, 'oldPassword', 'newPassword'),
+      ).rejects.toThrow(
+        new HttpException('oldPassword is incorrect', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { id: 1 },
+      });
+      expect(BcryptPass.prototype.hashPassword).toHaveBeenCalledWith(
+        'newPassword',
+      );
+    });
+  });
 });
