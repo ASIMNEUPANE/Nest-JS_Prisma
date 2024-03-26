@@ -95,7 +95,7 @@ export class AuthsService {
     };
 
     const token = generateJWT(payload);
-    console.log(token)
+    console.log(token);
     return {
       user: { name: user.name, roles: user.roles, email: user.email },
       token,
@@ -137,15 +137,19 @@ export class AuthsService {
     password: string,
   ): Promise<boolean> {
     const auth = await this.prisma.auth.findUnique({ where: { email } });
-    if (!auth) throw new Error('user not found');
+    if (!auth)
+      throw new HttpException('user not found', HttpStatus.BAD_REQUEST);
     const isValidToken = await verifyOTP(otp);
-    if (!isValidToken) throw new Error('Token expire');
+    if (!isValidToken)
+      throw new HttpException('Token expired', HttpStatus.BAD_REQUEST);
     const emailValid = auth?.otp === otp;
-    if (!emailValid) throw new Error('Token mismatch');
-    await this.prisma.user.updateMany({
+    if (!emailValid)
+      throw new HttpException('Token mismatch', HttpStatus.BAD_REQUEST);
+    const hashPassword = await this.bcrypt.hashPassword(password);
+    await this.prisma.user.update({
       where: { email },
       data: {
-        password: await this.bcrypt.hashPassword(password),
+        password: hashPassword,
       },
     });
     await this.prisma.auth.delete({ where: { email } });

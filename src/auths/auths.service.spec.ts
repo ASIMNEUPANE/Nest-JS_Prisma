@@ -392,4 +392,98 @@ describe('AuthsService', () => {
       });
     });
   });
+
+  describe('forget password', () => {
+    it('should forget password', async () => {
+      jest
+        .spyOn(prismaService.auth, 'findUnique')
+        .mockResolvedValue(authDbdata);
+      jest.spyOn(OTP, 'verifyOTP').mockResolvedValue(true);
+      jest
+        .spyOn(BcryptPass.prototype, 'hashPassword')
+        .mockResolvedValue('hashPassword');
+      jest
+        .spyOn(prismaService.user, 'update')
+        .mockResolvedValue(expectedResult);
+      jest.spyOn(prismaService.auth, 'delete').mockResolvedValue(authDbdata);
+      const result = await service.forgetPassowrd(
+        'asimneupane11@gmail.com',
+        '123456',
+        'Helloworld@4',
+      );
+      expect(result).toEqual(true);
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
+      expect(OTP.verifyOTP).toHaveBeenCalledWith('123456');
+      expect(BcryptPass.prototype.hashPassword).toHaveBeenCalledWith(
+        'Helloworld@4',
+      );
+      expect(prismaService.user.update).toHaveBeenCalledWith({
+        where: { email: expectedResult.email },
+        data: {
+          password: 'hashPassword',
+        },
+      });
+      expect(prismaService.auth.delete).toHaveBeenCalledWith({
+        where: { email: authDbdata.email },
+      });
+    });
+    it('should throw an error if user not found', async () => {
+      jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(null);
+
+      await expect(() =>
+        service.forgetPassowrd(
+          'asimneupane11@gmail.com',
+          '123456',
+          'Helloworld@4',
+        ),
+      ).rejects.toThrow(
+        new HttpException('user not found', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
+    });
+    it('should throw an error if OTP expired', async () => {
+      jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(authDbdata);
+      jest.spyOn(OTP, 'verifyOTP').mockResolvedValue(false);
+
+      await expect(() =>
+        service.forgetPassowrd(
+          'asimneupane11@gmail.com',
+          '123456',
+          'Helloworld@4',
+        ),
+      ).rejects.toThrow(
+        new HttpException('Token expired', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
+      expect(OTP.verifyOTP).toHaveBeenCalledWith('123456');
+
+
+    });
+    it('should throw an error if OTP mismatch', async () => {
+      jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(authDbdata);
+      jest.spyOn(OTP, 'verifyOTP').mockResolvedValue(true);
+
+      await expect(() =>
+        service.forgetPassowrd(
+          'asimneupane11@gmail.com',
+          '654321',
+          'Helloworld@4',
+        ),
+      ).rejects.toThrow(
+        new HttpException('Token mismatch', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
+      expect(OTP.verifyOTP).toHaveBeenCalledWith('654321');
+
+
+    });
+  });
 });
