@@ -5,6 +5,7 @@ import { BcryptPass } from '../utils/Bcrypt';
 import { Role } from '@prisma/client';
 import * as OTP from '../utils/otp';
 import * as mail from '../utils/mailer';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 const expectedResult = {
   id: 1,
@@ -31,6 +32,12 @@ const authData = {
   email: registerData.email,
   otp: '123456',
 };
+
+const authDbdata = {
+  id: 1,
+  email: registerData.email,
+  otp: '123456',
+};
 describe('AuthsService', () => {
   let service: AuthsService;
   let prismaService: PrismaService;
@@ -52,6 +59,7 @@ describe('AuthsService', () => {
             },
             user: {
               create: jest.fn(),
+              update: jest.fn(),
             },
           },
         },
@@ -99,6 +107,38 @@ describe('AuthsService', () => {
         'asimneupane11@gmail.com',
         '123456',
       );
+    });
+  });
+
+  describe('verify user', () => {
+    it('should verify users', async () => {
+      jest
+        .spyOn(prismaService.auth, 'findUnique')
+        .mockResolvedValue(authDbdata);
+      jest.spyOn(OTP, 'verifyOTP').mockResolvedValue(true);
+      jest
+        .spyOn(prismaService.user, 'update')
+        .mockResolvedValue(expectedResult);
+      jest.spyOn(prismaService.auth, 'delete').mockResolvedValue(authDbdata);
+      const result = await service.verify(authData);
+      expect(result).toEqual(expectedResult);
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
+      expect(OTP.verifyOTP).toHaveBeenCalledWith('123456');
+      expect(prismaService.user.update).toHaveBeenCalledWith({
+        where: { email: authData.email },
+        data: { isEmailVerified: true, isActive: true },
+      });
+      expect(prismaService.auth.delete).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
+    });
+    it('should throw an error if user not found', async () => {
+      jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(null);
+   await expect(() => service.verify(authData)).rejects.toThrow(
+    new HttpException('User is not available', HttpStatus.BAD_REQUEST)
+  );
     });
   });
 });
