@@ -5,6 +5,7 @@ import { BcryptPass } from '../utils/Bcrypt';
 import { Role } from '@prisma/client';
 import * as OTP from '../utils/otp';
 import * as mail from '../utils/mailer';
+import * as JWT from '../utils/jwt';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 const expectedResult = {
@@ -58,6 +59,7 @@ describe('AuthsService', () => {
               delete: jest.fn(),
             },
             user: {
+              findUnique: jest.fn(),
               create: jest.fn(),
               update: jest.fn(),
             },
@@ -180,6 +182,75 @@ describe('AuthsService', () => {
       expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
         where: { email: authData.email },
       });
+    });
+  });
+  describe('regenerate otp for user', () => {
+    it('should regenerate a user register otp', async () => {
+      jest
+        .spyOn(prismaService.auth, 'findUnique')
+        .mockResolvedValue(authDbdata);
+      jest.spyOn(OTP, 'generateOTP').mockReturnValue('123456' as never);
+      jest.spyOn(prismaService.auth, 'update').mockResolvedValue(authDbdata);
+      jest.spyOn(mail, 'mailer').mockResolvedValue('email@succesjiahdabidna');
+      const result = await service.regenerateToken(authData.email);
+      expect(result).toEqual(true);
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: authData.email },
+      });
+      expect(OTP.generateOTP).toHaveBeenCalled();
+      expect(prismaService.auth.update).toHaveBeenCalledWith({
+        where: { email: authData.email },
+        data: { otp: '123456' },
+      });
+      expect(mail.mailer).toHaveBeenCalledWith(
+        'asimneupane11@gmail.com',
+        '123456',
+      );
+    });
+    it('should throw an error if user not found', async () => {
+      jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(null);
+      await expect(() =>
+        service.regenerateToken(authData.email),
+      ).rejects.toThrow(
+        new HttpException('User is not available', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: 'asimneupane11@gmail.com' },
+      });
+    });
+  });
+  describe('login the user', () => {
+    it('should login the user and give back jwttoken', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue(expectedResult);
+      jest
+        .spyOn(BcryptPass.prototype, 'comparePasswords')
+        .mockResolvedValue(true);
+      const token = 'generatedJWTtoken';
+      jest.spyOn(JWT, 'generateJWT').mockReturnValue(token);
+      const result = await service.login(expectedResult.email, 'Helloworld@2');
+      const mockPayload = {
+        id: expectedResult.id,
+        email: expectedResult.email,
+        roles: expectedResult?.roles || [],
+      };
+      expect(result).toEqual({
+        user: {
+          name: expectedResult.name,
+          roles: expectedResult.roles,
+          email: expectedResult.email,
+        },
+        token: token,
+      });
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email: expectedResult.email },
+      });
+      expect(BcryptPass.prototype.comparePasswords).toHaveBeenCalledWith(
+        'Helloworld@2',
+        'hashPassword',
+      );
+      expect(JWT.generateJWT).toHaveBeenCalledWith(mockPayload);
     });
   });
 });

@@ -93,7 +93,6 @@ export class AuthsService {
       email: user?.email,
       roles: user?.roles,
     };
-    console.log('pugyo yeaha')
 
     const token = generateJWT(payload);
     console.log(token)
