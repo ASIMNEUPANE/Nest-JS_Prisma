@@ -446,7 +446,9 @@ describe('AuthsService', () => {
       });
     });
     it('should throw an error if OTP expired', async () => {
-      jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(authDbdata);
+      jest
+        .spyOn(prismaService.auth, 'findUnique')
+        .mockResolvedValue(authDbdata);
       jest.spyOn(OTP, 'verifyOTP').mockResolvedValue(false);
 
       await expect(() =>
@@ -462,11 +464,11 @@ describe('AuthsService', () => {
         where: { email: authData.email },
       });
       expect(OTP.verifyOTP).toHaveBeenCalledWith('123456');
-
-
     });
     it('should throw an error if OTP mismatch', async () => {
-      jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(authDbdata);
+      jest
+        .spyOn(prismaService.auth, 'findUnique')
+        .mockResolvedValue(authDbdata);
       jest.spyOn(OTP, 'verifyOTP').mockResolvedValue(true);
 
       await expect(() =>
@@ -482,8 +484,6 @@ describe('AuthsService', () => {
         where: { email: authData.email },
       });
       expect(OTP.verifyOTP).toHaveBeenCalledWith('654321');
-
-
     });
   });
 });
