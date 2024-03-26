@@ -33,7 +33,7 @@ export class CreateAuthDto {
   password: string;
 
   @IsOptional()
-  images?: string;
+  images?: string ;
 }
 
 export class VerifyDto {
