@@ -53,12 +53,12 @@ export class UserService {
     }
 
     // Get total count
-    const total = await this.prisma.blog.count({
+    const total = await this.prisma.user.count({
       where: whereCondition,
     });
 
     // Fetch paginated data
-    const data = await this.prisma.blog.findMany({
+    const data = await this.prisma.user.findMany({
       where: whereCondition,
       skip: (pageNum - 1) * size,
       take: size,

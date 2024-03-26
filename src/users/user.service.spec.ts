@@ -6,7 +6,8 @@ import { PrismaService } from '../prisma/prisma.service';
 
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-const expectedResult = {
+const UserArray =[ 
+  {
   id: 1,
   name: 'Asim Neupane',
   email: 'asimneupane11@gmail.com',
@@ -19,7 +20,22 @@ const expectedResult = {
   created_by: 2,
   updated_by: 2,
   Blogs: [],
-};
+},
+  {
+  id: 2,
+  name: 'new user',
+  email: 'newuser@gmail.com',
+  password: 'hashPassword',
+  isEmailVerified: true,
+  isActive: true,
+  isArchive: false,
+  images: 'https://example.com/profile.jpg',
+  roles: [Role.ADMIN],
+  created_by: 2,
+  updated_by: 2,
+  Blogs: [],
+},
+];
 
 const registerData = {
   name: 'Asim Neupane',
@@ -67,9 +83,9 @@ describe('BlogService', () => {
         .mockResolvedValue('hashPassword');
       jest
         .spyOn(prismaService.user, 'create')
-        .mockResolvedValue(expectedResult);
+        .mockResolvedValue(UserArray[0]);
       const result = await service.createUser(registerData);
-      expect(result).toEqual(expectedResult);
+      expect(result).toEqual(UserArray[0]);
       expect(BcryptPass.prototype.hashPassword).toHaveBeenCalledWith(
         registerData.password,
       );
@@ -85,7 +101,30 @@ describe('BlogService', () => {
   });
   describe('getUser',()=>{
     it('should return a user',async()=>{
-      
+        // Mock input data
+        const limit = 1;
+        const page = 1;
+        const search = { roles:'ADMIN' };
+  
+        // Mock PrismaService calls
+        const totalCount = 3;
+        const paginatedData = [UserArray[0], UserArray[1]];
+  
+        jest.spyOn(prismaService.user, 'count').mockResolvedValue(totalCount);
+        jest
+          .spyOn(prismaService.user, 'findMany')
+          .mockResolvedValue(paginatedData);
+  
+        // Execute the method
+        const result = await service.getUser(limit, page, search);
+        console.log(result, '==========');
+        // Verify the result
+        expect(result).toEqual({
+          data: paginatedData,
+          total: totalCount,
+          limit,
+          page,
+        })
     })
   })
 });
