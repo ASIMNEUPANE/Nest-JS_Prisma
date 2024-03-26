@@ -252,7 +252,7 @@ describe('AuthsService', () => {
       );
       expect(JWT.generateJWT).toHaveBeenCalledWith(mockPayload);
     });
-    it('should thow an error if user not founf', async () => {
+    it('should thow an error if user not found', async () => {
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
       await expect(() =>
         service.login('asimneupane11@gmail.com', 'Helloworld@2'),
@@ -314,6 +314,82 @@ describe('AuthsService', () => {
         'Helloworld@2',
         'hashPassword',
       );
+    });
+  });
+  describe('generateFPToken for user', () => {
+    it('should generateFPToken for user', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue(expectedResult);
+      jest.spyOn(OTP, 'generateOTP').mockReturnValue('123456');
+      jest.spyOn(prismaService.auth, 'findUnique').mockResolvedValue(null);
+      jest.spyOn(prismaService.auth, 'create').mockResolvedValue(authDbdata);
+      jest.spyOn(mail, 'mailer').mockResolvedValue('email@succesjiahdabidna');
+
+      const result = await service.generateFPToken('asimneupane11@gmail.com');
+      expect(result).toEqual(true);
+
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: {
+          email: expectedResult.email,
+          isActive: true,
+          isArchive: false,
+        },
+      });
+      expect(OTP.generateOTP).toHaveBeenCalled();
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: expectedResult.email },
+      });
+      expect(prismaService.auth.create).toHaveBeenCalledWith({
+        data: { email: 'asimneupane11@gmail.com', otp: '123456' },
+      });
+      expect(mail.mailer).toHaveBeenCalledWith(authData.email, authData.otp);
+    });
+    it('should generateFPToken for user if its already save in auths', async () => {
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue(expectedResult);
+      jest.spyOn(OTP, 'generateOTP').mockReturnValue('123456');
+      jest
+        .spyOn(prismaService.auth, 'findUnique')
+        .mockResolvedValue(authDbdata);
+      jest.spyOn(prismaService.auth, 'update').mockResolvedValue(authDbdata);
+      jest.spyOn(mail, 'mailer').mockResolvedValue('email@succesjiahdabidna');
+
+      const result = await service.generateFPToken('asimneupane11@gmail.com');
+      expect(result).toEqual(true);
+
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: {
+          email: expectedResult.email,
+          isActive: true,
+          isArchive: false,
+        },
+      });
+      expect(OTP.generateOTP).toHaveBeenCalled();
+      expect(prismaService.auth.findUnique).toHaveBeenCalledWith({
+        where: { email: expectedResult.email },
+      });
+      expect(prismaService.auth.update).toHaveBeenCalledWith({
+        where: { email: authData.email },
+        data: { otp: '123456' },
+      });
+      expect(mail.mailer).toHaveBeenCalledWith(authData.email, authData.otp);
+    });
+    it('should throw an error if user is not found', async () => {
+      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
+      await expect(() =>
+        service.generateFPToken('asimneupane11@gmail.com'),
+      ).rejects.toThrow(
+        new HttpException('User is not available', HttpStatus.BAD_REQUEST),
+      );
+      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+        where: {
+          email: expectedResult.email,
+          isActive: true,
+          isArchive: false,
+        },
+      });
     });
   });
 });
