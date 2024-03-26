@@ -79,8 +79,8 @@ export class UserController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
     @Body() getUserDto: GetUserDto,
   ) {
-    const { name } = getUserDto;
-    const search = { name };
+    const { roles } = getUserDto;
+    const search = { roles };
     return this.userService.getUser(limit, page, search);
   }
 

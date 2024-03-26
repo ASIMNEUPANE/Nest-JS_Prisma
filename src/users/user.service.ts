@@ -39,7 +39,7 @@ export class UserService {
   async getUser(
     limit?: number,
     page?: number,
-    search?: { name?: string },
+    search?: { roles?: string },
   ): Promise<getReturn> {
     const pageNum = page;
     const size = limit;
@@ -48,8 +48,8 @@ export class UserService {
       isActive: true,
       isArchive: false,
     };
-    if (search.name) {
-      whereCondition.name = search.name;
+    if (search.roles) {
+      whereCondition.roles = search.roles;
     }
 
     // Get total count

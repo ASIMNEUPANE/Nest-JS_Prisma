@@ -57,6 +57,6 @@ export class GetUserDto {
     description: 'title of the blog',
     example: 'Nepal the great',
   })
-  name: string;
+  roles?: string;
 
 }
