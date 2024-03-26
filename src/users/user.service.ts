@@ -1,13 +1,14 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { BcryptPass } from 'src/utils/Bcrypt';
+import { PrismaService } from '../prisma/prisma.service';
+import { BcryptPass } from '../utils/Bcrypt';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import {
   BlockUserDto,
   DeleteUserDto,
   ResetPasswordDto,
 } from './dtos/update-user.dto';
+import { getReturn } from 'src/blog/blog.type';
 
 @Injectable()
 export class UserService {
@@ -33,10 +34,37 @@ export class UserService {
     });
     return result;
   }
-  async getUser() {
-    return await this.prisma.user.findMany({
-      where: { isActive: true, isArchive: false },
+
+
+  async getUser(
+    limit?: number,
+    page?: number,
+    search?: { name?: string },
+  ): Promise<getReturn> {
+    const pageNum = page;
+    const size = limit;
+
+    const whereCondition: any = {
+      isActive: true,
+      isArchive: false,
+    };
+    if (search.name) {
+      whereCondition.name = search.name;
+    }
+
+    // Get total count
+    const total = await this.prisma.blog.count({
+      where: whereCondition,
     });
+
+    // Fetch paginated data
+    const data = await this.prisma.blog.findMany({
+      where: whereCondition,
+      skip: (pageNum - 1) * size,
+      take: size,
+    });
+
+    return { data, total, limit: size, page: pageNum };
   }
   async getById(id: number) {
     return await this.prisma.user.findUnique({ where: { id } });

@@ -14,9 +14,11 @@ import {
   Put,
   UseGuards,
   SetMetadata,
+  Query,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dtos/CreateUser.dto';
+import { CreateUserDto, GetUserDto } from './dtos/CreateUser.dto';
 import {
   UpdateUserDto,
   UpdateByIdDto,
@@ -32,6 +34,7 @@ import {
   ApiBearerAuth,
   ApiResponse,
   ApiOperation,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -63,14 +66,22 @@ export class UserController {
   @Get()
   @Roles('ADMIN')
   @ApiOperation({ summary: 'List all user' })
+  @ApiQuery({ name: 'limit', required: false, type: String })
+  @ApiQuery({ name: 'page', required: false, type: String })
   @ApiResponse({
     status: 200,
     description: 'The found record',
     type: [UserEntity],
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  getUsers() {
-    return this.userService.getUser();
+  getUsers(
+    @Query('limit', new DefaultValuePipe(4), ParseIntPipe) limit: number = 4,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Body() getUserDto: GetUserDto,
+  ) {
+    const { name } = getUserDto;
+    const search = { name };
+    return this.userService.getUser(limit, page, search);
   }
 
   // Get user by id

@@ -48,3 +48,15 @@ export class CreateUserDto {
   })
   roles?: string[];
 }
+
+
+export class GetUserDto {
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    description: 'title of the blog',
+    example: 'Nepal the great',
+  })
+  name: string;
+
+}
