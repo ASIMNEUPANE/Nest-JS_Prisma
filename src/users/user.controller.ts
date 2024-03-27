@@ -37,8 +37,8 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { RoleGuard } from 'src/auths/guards/role.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { RoleGuard } from '../auths/guards/role.guard';
 
 @ApiBearerAuth('access-token')
 @UseGuards(RoleGuard)

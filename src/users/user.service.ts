@@ -35,7 +35,6 @@ export class UserService {
     return result;
   }
 
-
   async getUser(
     limit?: number,
     page?: number,
