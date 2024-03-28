@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import { Button } from "@/components/ui/button";
 const inter = Inter({ subsets: ["latin"] });
+
 
 export const metadata: Metadata = {
   title: "Blog Application",
@@ -17,8 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <h2>Nav bar</h2>
-        {children}
+    
+    {children}
         <h2>footer</h2>
         </body>
     </html>
