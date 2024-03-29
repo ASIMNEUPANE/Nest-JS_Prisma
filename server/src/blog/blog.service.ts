@@ -36,12 +36,14 @@ export class BlogService {
       where: whereCondition,
     });
 
+    console.log(whereCondition)
     // Fetch paginated data
     const data = await this.prisma.blog.findMany({
       where: whereCondition,
       skip: (pageNum - 1) * size,
       take: size,
     });
+    console.log(data)
 
     return { data, total, limit: size, page: pageNum };
   }
