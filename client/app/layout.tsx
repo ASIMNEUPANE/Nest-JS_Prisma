@@ -5,7 +5,7 @@ import "./globals.css";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 // import Footer from "@/components/Footer";
-
+import TanstackProvider from "@/providers/TanstackProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 
@@ -22,9 +22,11 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <body className="bg-green-300ay-700" >
+        <TanstackProvider>
     <Navbar />
     {children }
 {/* {<Footer/>} */}
+  </TanstackProvider>
         </body>
     </html>
   );

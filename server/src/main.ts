@@ -12,6 +12,7 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
+  app.enableCors()
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -27,7 +28,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/', app, document);
-  const PORT = 3000;
+  const PORT = 3333;
   await app.listen(PORT);
   logger.log(`app is running on port ${PORT} `);
 }
