@@ -15,7 +15,7 @@ type Blog = {
 
 }
 type blogAction = {
-  blog: Blog[]
+  blog: Blog[]  
   addBlog:(newBlog:Blog)=> void
 
 }
@@ -24,8 +24,8 @@ const blogStore = create<blogAction>((set) => ({
   blog: [],
   
   addBlog: (newBlog: Blog) =>
-    set((state) => ({
-      blog: [...state.blog, newBlog],
+  set((state) => ({
+    blog: [...state.blog, newBlog],
     })),
 }))
 

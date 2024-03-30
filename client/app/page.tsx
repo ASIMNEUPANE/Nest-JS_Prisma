@@ -1,4 +1,5 @@
 export default function Home() {
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-700">
       <div className="max-w-6xl mx-auto px-6">

@@ -16,18 +16,19 @@ type Blog = {
     totalWord: number;
     images?: string | null;
     author: string;
-  
-  }
+
+}
 const useBlog = () => {
     const { addBlog } = blogStore((state) => state)
 
 
-    const getAll = async (page: number, limit: number):Promise<Blog[] | null> => {
-        const result = await API.get(
-            `${URLS.BLOGS}?page=${page}&limit=${limit}`
+    const getAll = async (page: number, limit: number): Promise<Blog[] | null> => {
+        const { data } = await API.get(
+            `${URLS.BLOGS}?page=${page = 1}&limit=${limit = 4}`
         )
-        addBlog(result.data)
-        return result.data;
+        console.log(data, 'first')
+        addBlog(data.data)
+        return data.data;
 
     }
     return { getAll }
