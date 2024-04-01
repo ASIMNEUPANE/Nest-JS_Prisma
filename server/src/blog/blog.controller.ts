@@ -55,7 +55,7 @@ export class BlogController {
   @UseInterceptors(
     FileInterceptor('images', {
       storage: diskStorage({
-        destination: './public/blog',
+        destination: '/public/blog',
         filename: (req, file, cb) => {
           // Generating a unique filename
           const uniqueSuffix =
@@ -70,8 +70,8 @@ export class BlogController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new FileTypeValidator({ fileType: 'image/jpeg' }),
-          new MaxFileSizeValidator({ maxSize: 100000 }),
+          new FileTypeValidator({ fileType: 'image/png' }),
+          new MaxFileSizeValidator({ maxSize: 1000000 }),
         ],
         fileIsRequired: false,
       }),

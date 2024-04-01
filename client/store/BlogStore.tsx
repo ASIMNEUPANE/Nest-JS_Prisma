@@ -14,19 +14,21 @@ type Blog = {
   author: string;
 
 }
-type blogAction = {
-  blog: Blog[]  
-  addBlog:(newBlog:Blog)=> void
+type BlogStateType = {
+  blogs: Blog[]
+
 
 }
+type BlogActonsType = {
+  setBlogs: (newBlog: Blog[]) => void
+}
 
-const blogStore = create<blogAction>((set) => ({
-  blog: [],
-  
-  addBlog: (newBlog: Blog) =>
-  set((state) => ({
-    blog: [...state.blog, newBlog],
-    })),
+export type BlogStoreType = BlogStateType & BlogActonsType;
+
+const BlogStore = create<BlogStoreType>((set) => ({
+  blogs: [],
+
+  setBlogs: (blogs: Blog[]) =>
+    set({ blogs })
 }))
-
-export default blogStore
+export default BlogStore;
