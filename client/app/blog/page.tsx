@@ -2,33 +2,69 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import BlogStore from "@/store/BlogStore";
 import useBlogs from "@/hooks/useBlog";
+import { Skeleton } from "@/components/ui/skeleton";
+
 export default function Blog() {
     const { blogs } = BlogStore((state) => state);
-    console.log(blogs, 'bloggggggggg')
-    const { isLoading, isError } = useBlogs(1, 2)
+    let { isLoading, isError } = useBlogs(1, 4);
 
-    if (isLoading) <div>'loadinfffff' </div>
-    if (isError) <div>'error'</div>
-    return (
-        <div className="box m-4 flex">
-            <div className="border bg-gray-400 flex flex-wrap">
-                {blogs && blogs.map((blogItem, idx) => (
-                    <Card key={idx}>
-                        <CardHeader>
-                            <CardTitle>{blogItem.title}</CardTitle>
-                            <CardDescription>{blogItem.description}</CardDescription>
-                        </CardHeader>
-
-                        <CardContent>
-                            <img src={blogItem.images ? blogItem.images : ''} alt={blogItem.title}></img>
-                        </CardContent>
-                        <CardFooter>
-                            <p>By {blogItem.author}</p>
-                        </CardFooter>
-                    </Card>
-
-                ))}
+    if (isLoading) {
+        return (
+            <div className="box m-4 flex">
+                <div className="flex flex-wrap">
+                    {[...Array(4)].map((_, index) => (
+                        <Card key={index}>
+                            <CardHeader>
+                                <CardTitle className="pl-2">
+                                    <Skeleton className="w-[100px] h-[20px] rounded-full" />
+                                </CardTitle>
+                                <CardDescription>
+                                    <Skeleton className="w-[100px] h-[20px] rounded-full" />
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Skeleton className="w-[100px] h-[20px] rounded-full" />
+                            </CardContent>
+                            <CardFooter>
+                                <Skeleton className="w-[100px] h-[20px] rounded-full" />
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
+
+
+    if (isError) {
+        return <div>Error: Failed to load blogs. Please try again later.</div>;
+    }
+
+    if (blogs) {
+        return (
+            <div className="box m-4 flex">
+                <div className="flex flex-wrap">
+                    {blogs.map((blogItem) => (
+                        <Card key={blogItem.id}>
+                            <CardHeader>
+
+                                <CardTitle className="pl-2">{blogItem.title}</CardTitle>
+                                <CardDescription>{blogItem.description}</CardDescription>
+                            </CardHeader>
+                            <img className="w-80" src={'https://media.istockphoto.com/id/637696304/photo/patan.jpg?s=612x612&w=0&k=20&c=-53aSTGBGoOOqX5aoC3Hs1jhZ527v3Id_xOawHHVPpg='}></img>
+                            {/* <img src={blogItem.images ? blogItem.images : ''} alt={blogItem.title}></img> */}             <CardContent>
+
+                                {/* <img className="w-80" src={blogItem.images} alt={blogItem.title} /> */}
+                            </CardContent>
+                            <CardFooter>
+                                <h2>By: {blogItem.author}</h2>
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    return null; // Render nothing if no blogs are available yet
 }
