@@ -87,10 +87,21 @@ const useBlogs = (page: number, limit: number) => {
     const qn = useQuery({
         queryKey: ['getblogs', str],
         queryFn: async () => {
-            const { data } = await API.get(`${URLS.BLOGS}?page=${page}&limit=${limit}`);
+            const params = {
+                page: page,
+                limit: limit
+            };
+            const { data } = await API.get(URLS.BLOGS, { params });
+
+            // const { data } = await API.get(`${URLS.BLOGS}?page=${page}&limit=${limit}`);
             return data
         },
+         // select(data) {
+
+//             // },
+
     })
+    
 
     useEffect(() => {
         if (qn.data) {

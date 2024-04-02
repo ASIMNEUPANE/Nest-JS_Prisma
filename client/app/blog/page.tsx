@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Blog() {
     const { blogs } = BlogStore((state) => state);
-    let { isLoading, isError } = useBlogs(1, 4);
+    let { isLoading, isError } = useBlogs(1, 5);
 
     if (isLoading) {
         return (
