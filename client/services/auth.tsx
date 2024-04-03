@@ -6,5 +6,6 @@ type loginPayload ={
     password:string
 }
 export const login = async (payload:loginPayload) => {
-  return await API.post(URLS.AUTH + "/login", payload);
+  console.log(payload,'authservice')
+  return await API.post(URLS.AUTH + "/login", {payload});
 };
