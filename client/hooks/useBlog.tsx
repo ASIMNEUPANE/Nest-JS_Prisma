@@ -36,15 +36,14 @@ const useBlogs = (page: number, limit: number) => {
             };
             const { data } = await API.get(URLS.BLOGS, { params });
 
-            // const { data } = await API.get(`${URLS.BLOGS}?page=${page}&limit=${limit}`);
             return data
         },
-         // select(data) {
+        // select(data) {
 
-//             // },
+        //             // },
 
     })
-    
+
 
     useEffect(() => {
         if (qn.data) {
@@ -54,6 +53,11 @@ const useBlogs = (page: number, limit: number) => {
 
     return qn;
 };
+
+
+
+
+
 
 
 
