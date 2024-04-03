@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
-import useLogin from "@/hooks/useAuth"
+import {useLogin} from "@/hooks/useAuth"
 import { UserStore } from "@/store/UserStore"
 
 const FormSchema = z.object({
@@ -30,9 +30,10 @@ const FormSchema = z.object({
 })
 
 export default function login() {
+  const {loginMutation}  = useLogin()
 
-  const { user } = UserStore((state) => state);
-  console.log(user,'userrrrrrrrrrrrrrrr')
+  const { isLoggedIn, user,roles } = UserStore((state) => state);
+  console.log(isLoggedIn, user,roles,'userrrrrrrrrrrrrrrr')
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -43,7 +44,7 @@ export default function login() {
 
  async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-    let {isError} = await useLogin(data.email, data.password);
+    let {isError} = await loginMutation(data);
       toast({
         title: "You submitted the following values:",
         description: (
