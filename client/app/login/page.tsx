@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { string, z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,8 +16,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
-import {useLogin} from "@/hooks/useAuth"
+import { useLogin } from "@/hooks/useAuth"
 import { UserStore } from "@/store/UserStore"
+import { useState } from "react"
 
 const FormSchema = z.object({
   email: z
@@ -30,10 +31,10 @@ const FormSchema = z.object({
 })
 
 export default function login() {
-  const {loginMutation}  = useLogin()
-
-  const { isLoggedIn, user,roles } = UserStore((state) => state);
-  console.log(isLoggedIn, user,roles,'userrrrrrrrrrrrrrrr')
+  const { loginMutation, isError } = useLogin('')
+  const [errors, setError] = useState([]);
+  const { isLoggedIn, user, roles } = UserStore((state) => state);
+  console.log(isLoggedIn, user, roles, 'userrrrrrrrrrrrrrrr')
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -42,9 +43,10 @@ export default function login() {
     },
   })
 
- async function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-    let {isError} = await loginMutation(data);
+      let { isError } = await loginMutation(data);
+      console.log(isError, 'reactquere')
       toast({
         title: "You submitted the following values:",
         description: (
@@ -54,10 +56,18 @@ export default function login() {
         ),
       });
     } catch (error) {
-console.log('errrrrrrrrrrr')
+      console.log((error as any).response.data.message, 'pggggggerrorrrrrrrrrr')
+      setError((error as any).response.data.message)
     }
+   
   }
+
+  if (isLoggedIn === true) {
+    return <div>your are login</div>
+  }
+
   return (
+    
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
         <FormField
@@ -93,7 +103,10 @@ console.log('errrrrrrrrrrr')
           )}
         />
         <Button type="submit">Submit</Button>
+        {errors && <div className="text-red-500">{errors}</div>}
       </form>
     </Form>
+
+
   )
 }
