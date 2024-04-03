@@ -1,28 +1,38 @@
 import { login } from "@/services/auth"
 import { UserStore } from "@/store/UserStore"
+import API from "@/utils/API"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
+import { URLS } from "@/constants"
 
-const useLogin = (email: string, password: string) => {
-    console.log(email, password, 'hoooooooksssssss')
+
+type loginPayload = {
+    email: string,
+    password: string
+}
+
+export const useLogin: any = () => {
     const { setIsLoggedIn } = UserStore((state) => state)
 
-    const mutation = useMutation({
-        mutationFn: async () => {
-
-            const {data} = await login({ email, password })
-            console.log(data, '==============')
-            return data;
+    const { mutateAsync: loginMutation, isSuccess, data } = useMutation({
+        mutationFn: async (payload: loginPayload) => {
+            let { email, password } = payload
+            const { data } = await API.post(URLS.AUTH + "/login", { email, password });
+            console.log(data)
+            return data
         },
-
+        onSuccess: (data: any) => {
+            setIsLoggedIn(data)
+        }
     })
 
-        useEffect(() => {
-            if (mutation.isSuccess) setIsLoggedIn(mutation.data)
-        }, [mutation.data, setIsLoggedIn])
-    return mutation
+
+    
+
+
+
+    return { loginMutation, isSuccess }
 }
 
 
 
-export default useLogin
