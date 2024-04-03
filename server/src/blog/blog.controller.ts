@@ -79,7 +79,7 @@ export class BlogController {
     file: Express.Multer.File,
     @Body() createBlogDto: CreateBlogDto,
     @Request() req: any,
-  ) {
+  ) { 
     if (file) {
       const uniqueSuffix = Date.now() + '.' + file.originalname.split('.')[1];
 
