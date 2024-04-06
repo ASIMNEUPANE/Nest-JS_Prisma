@@ -1,12 +1,22 @@
 'use client'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import BlogStore from "@/store/BlogStore";
-import useBlogs from "@/hooks/useBlog";
 import { Skeleton } from "@/components/ui/skeleton";
+import useList from "@/hooks/useList";
+import { URLS } from "@/constants";
+import { useEffect } from "react";
 
 export default function Blog() {
-    const { blogs } = BlogStore((state) => state);
-    let { isLoading, isError } = useBlogs(1, 5);
+
+    const { blogs, setBlogs } = BlogStore((state) => state);
+
+    let { isLoading, isError, data } = useList('listBlog',URLS.BLOGS, 1, 5)
+
+    useEffect(() => {
+        if (data) {
+            setBlogs(data.data);
+        }
+    }, [data, setBlogs]);
 
     if (isLoading) {
         return (
@@ -68,3 +78,7 @@ export default function Blog() {
 
     return null; // Render nothing if no blogs are available yet
 }
+function setBlogs(data: any) {
+    throw new Error("Function not implemented.");
+}
+

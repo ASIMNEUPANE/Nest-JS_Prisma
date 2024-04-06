@@ -33,6 +33,12 @@ export const UserStore = create<UserStoreType>((set) => ({
     ...initialUserState,
 
     setIsLoggedIn: (payload: { user: User }) => set((state: any) =>
-        ({ ...state, isLoggedIn: true, user: payload.user, roles: payload.user.roles })),
+
+    ({ ...state,
+         isLoggedIn: true,
+         user: payload.user,
+         roles: payload.user.roles || [] }
+        
+    )),
     setLogOut: () => set(initialUserState), // Reset to initial state on logout
 }));

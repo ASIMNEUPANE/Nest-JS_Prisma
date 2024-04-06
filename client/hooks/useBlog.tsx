@@ -1,6 +1,4 @@
 
-
-
 import { URLS } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import API from "@/utils/API";
