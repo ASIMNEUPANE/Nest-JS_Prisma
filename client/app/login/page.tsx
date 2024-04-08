@@ -122,7 +122,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
+import { setToken } from "@/utils/session"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -153,7 +153,6 @@ const FormSchema = z.object({
 export default function login() {
   const { postMutation, data, isSuccess, error } = usePost('')
   const { setIsLoggedIn, isLoggedIn, user, roles } = UserStore((state) => state);
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -164,9 +163,11 @@ export default function login() {
 
   useEffect(() => {
     if (isSuccess) {
+      setToken(data.token)
+
       setIsLoggedIn(data);
     }
-  }, [setIsLoggedIn, data])
+  }, [ data])
 
 
 

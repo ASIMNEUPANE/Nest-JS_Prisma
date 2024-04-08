@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-
+import { setToken } from '@/utils/session';
 type User = {
     name: string;
     email: string;
@@ -29,6 +29,7 @@ const initialUserState: UserStateType = {
 
 console.log(initialUserState, 'initialUserState');
 
+
 export const UserStore = create<UserStoreType>((set) => ({
     ...initialUserState,
 
@@ -37,7 +38,8 @@ export const UserStore = create<UserStoreType>((set) => ({
     ({ ...state,
          isLoggedIn: true,
          user: payload.user,
-         roles: payload.user.roles || [] }
+         roles: payload.user.roles || [],
+         }
         
     )),
     setLogOut: () => set(initialUserState), // Reset to initial state on logout
