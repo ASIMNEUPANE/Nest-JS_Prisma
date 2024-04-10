@@ -139,16 +139,7 @@ import usePost from "@/hooks/usePost"
 import { UserStore } from "@/store/UserStore"
 import { useEffect, useState } from "react"
 import { URLS } from "@/constants"
-
-const FormSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "This field has to be filled." })
-    .email("This is not a valid email."),
-  password: z
-    .string()
-    .min(8, { message: "Too short" })
-})
+import { FormSchema } from "@/validator/login.schema"
 
 export default function login() {
   const { postMutation, data, isSuccess, error } = usePost('')
@@ -167,7 +158,7 @@ export default function login() {
 
       setIsLoggedIn(data);
     }
-  }, [ data])
+  }, [data])
 
 
 
