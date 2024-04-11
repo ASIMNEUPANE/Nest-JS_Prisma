@@ -39,6 +39,9 @@ const usePost = (qkey: string) => {
         onError(error) {
             setSuccess(false)
             setError((error as any).response.data.message)
+            setTimeout(() => {
+                setError(false);
+              }, 2000);
         },
         onSuccess: async () => {
             if (qkey != 'false')

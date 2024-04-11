@@ -13,7 +13,8 @@ type SignIn = z.infer<typeof signUpValidation>;
 
 function Page() {
     const { postMutation, data, isSuccess, error, success } = usePost('false')
-const [email,setEmail]= useState('')
+    const [email, setEmail] = useState('')
+
     const { register, handleSubmit, formState: { errors } } = useForm<SignIn>({
         resolver: zodResolver(signUpValidation),
         defaultValues: {
@@ -27,7 +28,8 @@ const [email,setEmail]= useState('')
         setEmail(data.email)
         console.log(data, 'pahe')
         postMutation({ urls: URLS.AUTH + '/register', data })
-    };
+    }
+
 
     console.log(success)
     if (success) {
@@ -73,14 +75,14 @@ const [email,setEmail]= useState('')
                     <Button className="mt-4" type="submit">Submit</Button>
                     {error && <div className="text-red-500">
                         {error}
-                        
-                        
-                        
-                        </div>}
+
+
+
+                    </div>}
                 </form>
             </div>
         </div>
     );
 }
 
-export default Page;
+export default Page

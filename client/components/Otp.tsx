@@ -28,17 +28,18 @@ export function Otp({ email }: { email: string }) {
         postMutation({ urls: URLS.AUTH + '/verify', data })
         console.log(data, 'coppppppppppp')
     }
-const regenHandler =()=>{
-    console.log('clieckkdsf')
-    setUser({...user , otp:''})
-    let datas = user.email
+    const regenHandler = () => {
+        console.log('clieckkdsf')
+        setUser({ ...user, otp: '' })
+        let email = user.email
+        let data = { email }
 
-    postMutation({ urls: URLS.AUTH + '/regenerateToken',  datas})
+        postMutation({ urls: URLS.AUTH + '/regenerateToken', data })
 
-    console.log(user)
-}
+        console.log(user)
+    }
     return (
-        <div className='flex-col'> 
+        <div className='flex-col'>
             <input type="text" readOnly value={email} />
             <InputOTP value={user.otp} maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} onChange={(value) => setUser({ ...user, otp: value })}>
                 <InputOTPGroup>
@@ -51,8 +52,8 @@ const regenHandler =()=>{
                 </InputOTPGroup>
             </InputOTP>
             <Button onClick={handleSubmit}>Submit</Button>
-            {error && <div className="text-red-500">{error} 
-            <Button onClick={regenHandler}>regenrate token</Button>
+            {error && <div className="text-red-500">{error}
+                <Button onClick={regenHandler}>regenrate token</Button>
             </div>}
 
         </div>
