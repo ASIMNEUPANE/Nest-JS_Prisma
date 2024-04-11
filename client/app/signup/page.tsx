@@ -7,12 +7,13 @@ import { useForm } from "react-hook-form";
 import { signUpValidation } from "@/validator/signup.schema";
 import usePost from "@/hooks/usePost";
 import { URLS } from "@/constants";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Otp from "@/components/Otp";
 type SignIn = z.infer<typeof signUpValidation>;
 
 function Page() {
     const { postMutation, data, isSuccess, error, success } = usePost('false')
-
+const [email,setEmail]= useState('')
     const { register, handleSubmit, formState: { errors } } = useForm<SignIn>({
         resolver: zodResolver(signUpValidation),
         defaultValues: {
@@ -23,12 +24,17 @@ function Page() {
     });
 
     const onSubmit = (data: SignIn) => {
+        setEmail(data.email)
         console.log(data, 'pahe')
         postMutation({ urls: URLS.AUTH + '/register', data })
     };
 
- console.log(success)
-    if (success) return <div>register successfully</div>
+    console.log(success)
+    if (success) {
+        return <div className="h-screen flex justify-center items-center ">
+            <Otp email={email} />
+        </div>
+    }
 
     return (
         <div className="h-screen flex justify-center items-center ">

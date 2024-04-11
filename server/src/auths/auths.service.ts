@@ -20,6 +20,22 @@ export class AuthsService {
         password: string;
         [key: string]: any;
       };
+    const auth = await this.prisma.user.findUnique({
+      where: { email: rest.email },
+    });
+    if (auth)
+      throw new HttpException(
+        'User is already register',
+        HttpStatus.BAD_REQUEST,
+      );
+    const name = await this.prisma.user.findUnique({
+      where: { name: rest.name },
+    });
+    if (name)
+      throw new HttpException(
+        'This username is already in use',
+        HttpStatus.BAD_REQUEST,
+      );
     rest.password = await this.bcrypt.hashPassword(password);
     const user = await this.prisma.user.create({
       data: rest as Prisma.UserUncheckedCreateInput,
