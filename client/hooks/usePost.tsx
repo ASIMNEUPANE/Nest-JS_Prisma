@@ -28,17 +28,17 @@ const usePost = (qkey: string) => {
     const { mutate: postMutation, isError, isSuccess, data } = useMutation({
 
         mutationFn: async (payload: any) => {
-            try {
-                console.log(payload, 'payload')
-                const { data } = await API.post(payload.urls, { ...payload.data });
-                setSuccess(true)
-                return data;
-            }
-            catch (error) {
-                setSuccess(false)
-                setError((error as any).response.data.message)
-            }
+            console.log(payload, 'payload')
+            const { data } = await API.post(payload.urls, { ...payload.data });
+            setSuccess(true)
+            return data;
 
+
+
+        },
+        onError (error)  {
+            setSuccess(false)
+            setError((error as any).response.data.message)
         },
         onSuccess: async () => {
             if (qkey != 'false')

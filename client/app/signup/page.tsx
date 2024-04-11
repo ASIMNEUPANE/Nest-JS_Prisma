@@ -71,7 +71,12 @@ const [email,setEmail]= useState('')
                         {errors.password && <p className="text-red-500">{errors.password.message}</p>}
                     </div>
                     <Button className="mt-4" type="submit">Submit</Button>
-                    {error && <div className="text-red-500">{error}</div>}
+                    {error && <div className="text-red-500">
+                        {error}
+                        
+                        
+                        
+                        </div>}
                 </form>
             </div>
         </div>
