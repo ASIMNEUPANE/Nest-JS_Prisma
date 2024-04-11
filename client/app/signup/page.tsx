@@ -5,10 +5,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { signUpValidation } from "@/validator/signup.schema";
-
+import usePost from "@/hooks/usePost";
+import { URLS } from "@/constants";
+import { useEffect } from "react";
 type SignIn = z.infer<typeof signUpValidation>;
 
 function Page() {
+    const { postMutation, data, isSuccess, error, success } = usePost('false')
 
     const { register, handleSubmit, formState: { errors } } = useForm<SignIn>({
         resolver: zodResolver(signUpValidation),
@@ -20,8 +23,12 @@ function Page() {
     });
 
     const onSubmit = (data: SignIn) => {
-        console.log(data);
+        console.log(data, 'pahe')
+        postMutation({ urls: URLS.AUTH + '/register', data })
     };
+
+ console.log(success)
+    if (success) return <div>register successfully</div>
 
     return (
         <div className="h-screen flex justify-center items-center ">
@@ -58,6 +65,7 @@ function Page() {
                         {errors.password && <p className="text-red-500">{errors.password.message}</p>}
                     </div>
                     <Button className="mt-4" type="submit">Submit</Button>
+                    {error && <div className="text-red-500">{error}</div>}
                 </form>
             </div>
         </div>

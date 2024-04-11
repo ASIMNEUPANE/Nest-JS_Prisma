@@ -162,8 +162,8 @@ export default function login() {
 
 
 
-  async function onSubmit(payload: z.infer<typeof FormSchema>) {
-    postMutation({ urls: URLS.AUTH + '/login', payload });
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    postMutation({ urls: URLS.AUTH + '/login', data });
 
 
     toast({
