@@ -36,7 +36,7 @@ const usePost = (qkey: string) => {
 
 
         },
-        onError (error)  {
+        onError(error) {
             setSuccess(false)
             setError((error as any).response.data.message)
         },

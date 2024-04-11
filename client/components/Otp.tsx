@@ -38,7 +38,7 @@ const regenHandler =()=>{
     console.log(user)
 }
     return (
-        <div className='flex-col'> {/* Parent container */}
+        <div className='flex-col'> 
             <input type="text" readOnly value={email} />
             <InputOTP value={user.otp} maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} onChange={(value) => setUser({ ...user, otp: value })}>
                 <InputOTPGroup>
