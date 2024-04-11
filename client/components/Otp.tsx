@@ -18,6 +18,7 @@ type user = {
 export function Otp({ email }: { email: string }) {
 
     const { postMutation, data, success, error } = usePost('')
+    const [zodErr, setZodErr] = useState<string | null>(null)
     const [user, setUser] = useState<user>({
 
         email: email,
@@ -25,22 +26,25 @@ export function Otp({ email }: { email: string }) {
     })
     const handleSubmit = () => {
         let data = user
-        postMutation({ urls: URLS.AUTH + '/verify', data })
-        console.log(data, 'coppppppppppp')
+        const isValid = otpValidation.safeParse(user);
+        if (isValid.success) {
+           postMutation({ urls: URLS.AUTH + '/verify', data })
+         
+        }
+        else {
+            setZodErr(isValid.error.message)
+        }
     }
     const regenHandler = () => {
-        console.log('clieckkdsf')
         setUser({ ...user, otp: '' })
         let email = user.email
         let data = { email }
-
         postMutation({ urls: URLS.AUTH + '/regenerateToken', data })
 
-        console.log(user)
     }
     return (
         <div className='flex-col'>
-            <input type="text" readOnly value={email} />
+            <input type="text" value={email} />
             <InputOTP value={user.otp} maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} onChange={(value) => setUser({ ...user, otp: value })}>
                 <InputOTPGroup>
                     <InputOTPSlot index={0} />
@@ -51,6 +55,8 @@ export function Otp({ email }: { email: string }) {
                     <InputOTPSlot index={5} />
                 </InputOTPGroup>
             </InputOTP>
+            {zodErr && <p className="text-red-500">{zodErr}</p>}
+
             <Button onClick={handleSubmit}>Submit</Button>
             {error && <div className="text-red-500">{error}
                 <Button onClick={regenHandler}>regenrate token</Button>

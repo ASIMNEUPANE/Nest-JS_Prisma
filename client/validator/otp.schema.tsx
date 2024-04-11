@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const otpValidation = z.object({
-    name: z.string().min(1),
     email: z
         .string()
         .min(1, { message: "This field has to be filled." })
