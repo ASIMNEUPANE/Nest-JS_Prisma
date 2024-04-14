@@ -17,7 +17,6 @@ const usePost = (qkey: string) => {
         mutationFn: async (payload: any) => {
             console.log(payload, 'payload')
             const { data } = await API.post(payload.urls, { ...payload.data });
-            setSuccess(true)
             return data;
 
 
@@ -31,6 +30,8 @@ const usePost = (qkey: string) => {
             }, 2000);
         },
         onSuccess: async () => {
+            setSuccess(true)
+
             if (qkey != 'false')
                 await queryClient.invalidateQueries({ queryKey: [qkey] });
         },

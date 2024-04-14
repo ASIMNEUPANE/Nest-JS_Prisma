@@ -42,7 +42,8 @@ export class AuthsService {
     });
     const token = generateOTP();
     const authUSer = { email: user.email, otp: token };
-    await this.prisma.auth.create({ data: authUSer });
+    const x = await this.prisma.auth.create({ data: authUSer });
+    console.log(x);
     await mailer(user?.email, token);
     return user;
   }

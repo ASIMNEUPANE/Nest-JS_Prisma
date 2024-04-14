@@ -28,19 +28,25 @@ export function Otp({ email }: { email: string }) {
         let data = user
         const isValid = otpValidation.safeParse(user);
         if (isValid.success) {
-           postMutation({ urls: URLS.AUTH + '/verify', data })
-         
+            postMutation({ urls: URLS.AUTH + '/verify', data })
+
+
         }
         else {
             setZodErr(isValid.error.message)
         }
     }
+
+
     const regenHandler = () => {
         setUser({ ...user, otp: '' })
         let email = user.email
         let data = { email }
         postMutation({ urls: URLS.AUTH + '/regenerateToken', data })
 
+    }
+    if (success === true) {
+        return <div>succesfully do it</div>
     }
     return (
         <div className='flex-col'>
