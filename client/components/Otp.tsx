@@ -11,7 +11,6 @@ import { otpValidation } from '@/validator/otp.schema'
 import { Button } from './ui/button'
 import { URLS } from "@/constants";
 import Loader from './Loader'
-import { boolean } from 'zod'
 
 type user = {
     email: string,
@@ -62,30 +61,39 @@ export function Otp({ email }: { email: string }) {
         </div>
     }
 
-   
-   
+
+
     if (regenOtp) {
         return (
 
-            <div className='flex-col'>
-                <input type="text" value={email} />
-                <InputOTP value={user.otp} maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} onChange={(value) => setUser({ ...user, otp: value })}>
-                    <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
-                        <InputOTPSlot index={4} />
-                        <InputOTPSlot index={5} />
-                    </InputOTPGroup>
-                </InputOTP>
-                {zodErr && <p className="text-red-500">{zodErr}</p>}
+            <div className="w-screen bg-gradient-to-r from-[#F28383] from-10% via-[#9D6CD2] via-30% to-[#481EDC] to-90% flex items-center justify-center h-screen">
 
-                <Button onClick={handleSubmit}>Submit</Button>
-                {error && <div className="text-red-500">{error}
-                    <Button onClick={regenHandler}>regenrate token</Button>
-                </div>}
+                <div className="max-w-[960px] bg-black-dark  items-center gap-10 p-5 rounded-2xl flex flex-col">
 
+                    <div className=''>
+                        <div className='bg-none  p-1 rounded-md text-white'><h1>{email}</h1></div>
+                    </div>
+                    <div>
+                        <InputOTP value={user.otp} maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} onChange={(value) => setUser({ ...user, otp: value })}>
+                            <InputOTPGroup>
+                                <InputOTPSlot className='text-white' index={0} />
+                                <InputOTPSlot className='text-white' index={1} />
+                                <InputOTPSlot className='text-white' index={2} />
+                                <InputOTPSlot className='text-white' index={3} />
+                                <InputOTPSlot className='text-white' index={4} />
+                                <InputOTPSlot className='text-white' index={5} />
+                            </InputOTPGroup>
+                        </InputOTP>
+                        {zodErr && <p className="text-red-500">{zodErr}</p>}
+                    </div>
+                    <div>
+                        <Button onClick={handleSubmit}>Submit</Button>
+                        {error && <div className="text-red-500">{error}
+                            <Button onClick={regenHandler}>regenrate token</Button>
+                        </div>}
+
+                    </div>
+                </div>
             </div>
 
         )

@@ -89,7 +89,7 @@ export default function login() {
             <button type='submit' className="bg-gradient-to-r from-blue-400 to-cyan-200 w-80 font-semibold rounded-full py-2">Sign in</button>
           </form>
           <div className="text-white border-t border-white-light pt-4 space-y-4 text-sm">
-            <p>Don't have an account? <Link href={'signup'} className="text-green-500 font-semibold cursor-pointer ">Sign up</Link></p>
+            <p>Don't have an account? <Link href={'signup'} className="text-green-500 font-semibold cursor-pointer ">Sign Up</Link></p>
             <p>Forgot password? <a className="text-green-500 font-semibold cursor-pointer">Reset password</a></p>
             <p>Don't have a password yet? <a className="text-green-500 font-semibold cursor-pointer">Set password</a></p>
           </div>
