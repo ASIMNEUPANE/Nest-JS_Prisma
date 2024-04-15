@@ -9,10 +9,11 @@ import usePost from "@/hooks/usePost";
 import { URLS } from "@/constants";
 import { useEffect, useState } from "react";
 import Otp from "@/components/Otp";
+import Loader from "@/components/Loader";
 type SignIn = z.infer<typeof signUpValidation>;
 
 function Page() {
-    const { postMutation, data, isSuccess, error, success } = usePost('false')
+    const { postMutation, data, isSuccess, error, success, isPending } = usePost('false')
     const [email, setEmail] = useState('')
 
     const { register, handleSubmit, formState: { errors } } = useForm<SignIn>({
@@ -32,6 +33,12 @@ function Page() {
 
 
     console.log(success)
+    if (isPending) {
+        return     <div className="flex h-screen items-center justify-center">
+
+            <Loader />
+        </div>
+    }
     if (success) {
         return <div className="h-screen flex justify-center items-center ">
             <Otp email={email} />

@@ -140,9 +140,10 @@ import { UserStore } from "@/store/UserStore"
 import { useEffect, useState } from "react"
 import { URLS } from "@/constants"
 import { FormSchema } from "@/validator/login.schema"
+import Loader from "@/components/Loader"
 
 export default function login() {
-  const { postMutation, data, isSuccess, error } = usePost('')
+  const { postMutation, data, isSuccess, error, isPending } = usePost('')
   const { setIsLoggedIn, isLoggedIn, user, roles } = UserStore((state) => state);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -176,6 +177,12 @@ export default function login() {
     });
 
 
+  }
+
+  if (isPending) {
+    return <div className="flex h-screen items-center justify-center">
+      <Loader />
+    </div>
   }
 
   if (isLoggedIn) {

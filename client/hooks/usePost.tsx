@@ -12,7 +12,7 @@ const usePost = (qkey: string) => {
     const queryClient = useQueryClient()
     const [error, setError] = useState(false)
     const [success, setSuccess] = useState(false)
-    const { mutate: postMutation, isError, isSuccess, data } = useMutation({
+    const { mutate: postMutation, isError, isSuccess, data,isPending } = useMutation({
 
         mutationFn: async (payload: any) => {
             console.log(payload, 'payload')
@@ -34,11 +34,11 @@ const usePost = (qkey: string) => {
 
             if (qkey != 'false')
                 await queryClient.invalidateQueries({ queryKey: [qkey] });
-        },
+        }, 
 
     })
     console.log(data)
-    return { postMutation, isError, isSuccess, data, error, success }
+    return { postMutation, isError, isSuccess, data, error, success,isPending }
 }
 
 export default usePost;
