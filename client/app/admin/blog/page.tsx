@@ -46,7 +46,7 @@ function page() {
                             $2999
                         </td>
                         <td className="px-6 py-4 text-right">
-                            <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                            <Link href={'/admin/blog/edit'} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</Link>
                         </td>
                     </tr>
 

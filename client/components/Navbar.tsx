@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 
+
 function Navbar() {
   return (
     <div className='flex gap-11 bg-slate-900 '>
