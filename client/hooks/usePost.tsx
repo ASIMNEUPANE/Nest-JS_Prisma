@@ -9,6 +9,7 @@ import { boolean } from "zod"
 
 
 const usePost = (qkey: string) => {
+    
     const queryClient = useQueryClient()
     const [error, setError] = useState(false)
     const [success, setSuccess] = useState(false)
@@ -17,6 +18,7 @@ const usePost = (qkey: string) => {
         mutationFn: async (payload: any) => {
             console.log(payload, 'payload')
             const { data } = await API.post(payload.urls, { ...payload.data });
+            console.log(data,'hookswala')
             return data;
 
 

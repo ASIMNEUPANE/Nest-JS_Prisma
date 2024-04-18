@@ -1,3 +1,4 @@
+import Link from "next/link"
 
 function add() {
     return (
@@ -25,6 +26,7 @@ function add() {
                     <div  className='p-2'>
 
                     <button type='submit' className=" p-3 w-80 bg-gradient-to-r from-blue-400 to-cyan-200  font-semibold rounded-full ">Create User</button>
+                    <Link className='p-32 ' href={'/admin/user'}>Go Back</Link>
                     </div>
                     </div>
 

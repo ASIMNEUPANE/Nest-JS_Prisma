@@ -67,7 +67,7 @@ function Page() {
                             <div className="absolute top-1 left-1 bg-white-medium rounded-full p-2 flex items-center justify-center text-blue-300">
                                 <HiOutlineMailOpen />
                             </div>
-                            <input {...register("name")} type="email" placeholder="user name" className="w-80 bg-white py-2 px-12 rounded-full focus:bg-black-dark focus:outline-none focus:ring-1 focus:ring-neon-blue focus:drop-shadow-lg text-blue-300" />
+                            <input {...register("name")} type="text" placeholder="user name" className="w-80 bg-white py-2 px-12 rounded-full focus:bg-black-dark focus:outline-none focus:ring-1 focus:ring-neon-blue focus:drop-shadow-lg text-blue-300" />
                             {errors.name && <p className="text-red-500">{errors.name.message}</p>}
 
                         </div>

@@ -1,6 +1,7 @@
 import AdminNavbar from "@/components/AdmimNavbar";
 import TanstackProvider from "@/providers/TanstackProvider";
 import "../globals.css";
+import { AdminRoute, PrivateRoute } from "@/components/Routes";
 
 export default function RootLayout({
     children,
@@ -11,9 +12,11 @@ export default function RootLayout({
       <html lang="en" >
         <body className="bg-green-300ay-700" >
           <TanstackProvider>
+          <AdminRoute children={undefined} role={"ADMIN"}>
       <AdminNavbar />
       {children }
   {/* {<Footer/>} */}
+    </AdminRoute>
     </TanstackProvider>
           </body>
       </html>

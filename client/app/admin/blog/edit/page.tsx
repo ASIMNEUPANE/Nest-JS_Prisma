@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 function edit() {
@@ -40,7 +41,9 @@ function edit() {
                     </div>
                     <div  className='p-2'>
 
-                    <button type='submit' className=" p-3 w-80 bg-gradient-to-r from-blue-400 to-cyan-200  font-semibold rounded-full ">Sign in</button>
+                    <button type='submit' className=" p-3 w-80 bg-gradient-to-r from-blue-400 to-cyan-200  font-semibold rounded-full ">Edit Blog</button>
+                    <Link className='p-32 ' href={'/admin/user'}>Go Back</Link>
+
                     </div>
                     </div>
 

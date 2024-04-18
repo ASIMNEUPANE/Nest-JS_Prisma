@@ -1,17 +1,20 @@
 export const setToken = (token: string) => {
-  console.log(token)
-  const saveToken = localStorage.setItem("access_token", token);
-  if (saveToken === null || saveToken === undefined) return null;
-  return true;
+  if (typeof window !== "undefined") {
+    localStorage.setItem("access_token", token);
+    return true;
+  }
+  return false;
 };
 
 export const getToken = () => {
-  return localStorage.getItem("access_token");
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("access_token");
+  }
+  return null;
 };
-
 
 export const removeToken = () => {
-  return localStorage.removeItem("access_token");
-
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("access_token");
+  }
 };
-
