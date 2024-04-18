@@ -44,11 +44,13 @@ export default function login() {
     postMutation({ urls: URLS.AUTH + '/login', data });
     
   }
+  
   if (isLoggedIn && roles.includes('ADMIN')) {
     console.log(isLoggedIn, roles, 'login,roles')
     router.push('/admin')
   }
- 
+
+
 
 
   if (isPending) {
@@ -56,7 +58,6 @@ export default function login() {
       <Loader />
     </div>
   }
-
 
 
   return (

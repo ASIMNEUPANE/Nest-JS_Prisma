@@ -1,6 +1,5 @@
 import { PrivateRoute } from "@/components/Routes";
 
-
 export default function RootLayout({
     children,
 }: Readonly<{
