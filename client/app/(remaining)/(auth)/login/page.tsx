@@ -20,7 +20,7 @@ export default function login() {
   type login = z.infer<typeof FormSchema>
   const { postMutation, data, isSuccess, error, isPending } = usePost('')
   const { setIsLoggedIn, isLoggedIn, user, roles } = UserStore((state) => state);
-console.log(roles,'newroles')
+  console.log(roles, 'newroles')
   const { register, handleSubmit, formState: { errors } } = useForm<login>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -40,13 +40,16 @@ console.log(roles,'newroles')
 
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-
-
     console.log(data)
     postMutation({ urls: URLS.AUTH + '/login', data });
-  
- 
+    
   }
+  if (isLoggedIn && roles.includes('ADMIN')) {
+    console.log(isLoggedIn, roles, 'login,roles')
+    router.push('/admin')
+  }
+ 
+
 
   if (isPending) {
     return <div className="flex h-screen items-center justify-center">

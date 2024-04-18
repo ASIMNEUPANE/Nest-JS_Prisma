@@ -12,7 +12,7 @@ export default function RootLayout({
       <html lang="en" >
         <body className="bg-green-300ay-700" >
           <TanstackProvider>
-          <AdminRoute children={undefined} role={"ADMIN"}>
+          <AdminRoute role="ADMIN">
       <AdminNavbar />
       {children }
   {/* {<Footer/>} */}

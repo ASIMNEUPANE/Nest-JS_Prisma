@@ -7,12 +7,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-
-
-            <PrivateRoute>
-                {children}
-
-            </PrivateRoute>
+        <PrivateRoute>
+            {children}
+        </PrivateRoute>
 
     );
 }
