@@ -1,5 +1,5 @@
 "use client"
-
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -16,10 +16,11 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import Link from "next/link"
 export default function login() {
 
+  const router = useRouter()
   type login = z.infer<typeof FormSchema>
   const { postMutation, data, isSuccess, error, isPending } = usePost('')
   const { setIsLoggedIn, isLoggedIn, user, roles } = UserStore((state) => state);
-
+console.log(roles,'newroles')
   const { register, handleSubmit, formState: { errors } } = useForm<login>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -39,9 +40,12 @@ export default function login() {
 
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+
+
     console.log(data)
     postMutation({ urls: URLS.AUTH + '/login', data });
-
+  
+ 
   }
 
   if (isPending) {
@@ -50,9 +54,7 @@ export default function login() {
     </div>
   }
 
-  if (isLoggedIn) {
-    return <div>your are login</div>
-  }
+
 
   return (
 
