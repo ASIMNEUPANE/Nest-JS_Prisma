@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { setToken } from '@/utils/session';
+import { persist, createJSONStorage } from 'zustand/middleware'
+
 type User = {
     name: string;
     email: string;
@@ -30,17 +31,23 @@ const initialUserState: UserStateType = {
 console.log(initialUserState, 'initialUserState');
 
 
-export const UserStore = create<UserStoreType>((set) => ({
-    ...initialUserState,
-
-    setIsLoggedIn: (payload: { user: User }) => set((state: any) =>
-
-    ({ ...state,
-         isLoggedIn: true,
-         user: payload.user,
-         roles: payload.user.roles || [],
-         }
-        
-    )),
-    setLogOut: () => set(initialUserState), // Reset to initial state on logout
-}));
+export const UserStore = create<UserStoreType>()(
+    persist(
+      (set) => ({
+        ...initialUserState,
+  
+        setIsLoggedIn: (payload) =>
+          set((state) => ({
+            ...state,
+            isLoggedIn: true,
+            user: payload.user,
+            roles: payload.user.roles || [],
+          })),
+        setLogOut: () => set(initialUserState), // Reset to initial state on logout
+      }),
+      {
+        name: "user-storage", // name of the item in the storage (must be unique)
+        getStorage: () => sessionStorage, // Storage mechanism
+      }
+    )
+  );
