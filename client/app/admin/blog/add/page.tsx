@@ -8,10 +8,12 @@ import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { blogSchemaValidator } from '@/validator/blog.schema'
 import { URLS } from '@/constants'
-
+import { useRouter } from "next/navigation";
 function add() {
+    const router = useRouter()
     type blog = z.infer<typeof blogSchemaValidator>
-    const { postMutation, data, isSuccess, error } = usePost('listBlog')
+    const { postMutation, data, isSuccess, error, success } = usePost('listBlog')
+    
 
     const { register, handleSubmit, formState: { errors } } = useForm<blog>({
         resolver: zodResolver(blogSchemaValidator),
@@ -22,20 +24,20 @@ function add() {
             category: 'TECHNOLOGY',
             status: 'DRAFT',
             totalWord: '',
-            images: ''
+            // images: ''
 
         },
     })
 
     async function onSubmit(data: blog) {
         console.log(data)
+
         postMutation({ urls: URLS.BLOGS, data })
 
 
     }
-    useEffect(() => {
-
-    })
+    console.log(success,'sicessssss')
+    if (success) router.push('/admin/blog')
     return (
         <div className=" p-4 ">
             <div className='flex justify-center items-center '>
@@ -77,18 +79,18 @@ function add() {
                             {errors.totalWord && <p className="text-red-500">{errors.totalWord.message}</p>}
 
                         </div>
-                        <div className='p-2'>
+                        {/* <div className='p-2'>
                             <div className='pr-2 font-semibold'>images</div>
-                            <input {...register('images')} className='bg-white text-black rounded-sm p-2 w-80' type="file" placeholder='images' />
+                            <input  {...register('images')} className='bg-white text-black rounded-sm p-2 w-80' type="file" placeholder='images' />
                             {errors.images && <p className="text-red-500">{errors.images.message}</p>}
 
-                        </div>
+                        </div> */}
                         <div className='p-2'>
 
                             <button type='submit' className=" p-3 w-80 bg-gradient-to-r from-blue-400 to-cyan-200  font-semibold rounded-full ">Create Blog</button>
-                            <Link className='p-32 ' href={'/admin/blog'}>Go Back</Link>
                             {error && <div className="text-red-500">{error}</div>}
                         </div>
+                            <Link className='p-32 ' href={'/admin/blog'}>Go Back</Link>
                     </div>
 
 

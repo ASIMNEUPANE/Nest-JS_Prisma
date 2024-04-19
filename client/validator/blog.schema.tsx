@@ -20,6 +20,6 @@ export const blogSchemaValidator = z.object({
                 message:
                     "Invalid image file path. Supported formats: jpg, jpeg, png, gif",
             }
-        )
-        .optional(),
+        ).optional(),
+
 }).strict();

@@ -43,7 +43,6 @@ export class BlogService {
       skip: (pageNum - 1) * size,
       take: size,
     });
-    console.log(data)
 
     return { data, total, limit: size, page: pageNum };
   }
