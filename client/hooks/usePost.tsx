@@ -1,12 +1,9 @@
 import API from "@/utils/API"
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { boolean } from "zod"
+import {  useQueryClient } from '@tanstack/react-query'
 
 // Get QueryClient from the context
-
-
 
 const usePost = (qkey: string) => {
     
@@ -35,7 +32,7 @@ const usePost = (qkey: string) => {
             setSuccess(true)
 
             if (qkey != 'false')
-                await queryClient.invalidateQueries({ queryKey: [qkey] });
+             var a =   await queryClient.invalidateQueries({ queryKey: [qkey] });
         }, 
 
     })
