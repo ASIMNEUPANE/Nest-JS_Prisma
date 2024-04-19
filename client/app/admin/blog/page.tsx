@@ -1,6 +1,20 @@
-import Link from "next/link"
+'use client'
 
+import Link from "next/link"
+import BlogStore from "@/store/BlogStore";
+import { URLS } from "@/constants";
+import { useEffect } from "react";
+import useList from "@/hooks/useList";
 function page() {
+    const { blogs, setBlogs } = BlogStore((state) => state);
+
+    let { isLoading, isError, data } = useList('listBlog', URLS.BLOGS, 1, 5)
+
+    useEffect(() => {
+        if (data) {
+            setBlogs(data.data);
+        }
+    }, [data, setBlogs]);
     return (
 
 
@@ -31,24 +45,28 @@ function page() {
 
                     </tr>
                 </thead>
-                <tbody>
-                    <tr className=" text-white bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600">
-                        <th scope="row" className=" text-white px-6 py-4 font-medium   dark:text-white">
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td className="px-6 py-4">
-                            Silver
-                        </td>
-                        <td className="px-6 py-4">
-                            Laptop
-                        </td>
-                        <td className="px-6 py-4">
-                            $2999
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                            <Link href={'/admin/blog/edit'} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</Link>
-                        </td>
-                    </tr>
+                <tbody> {blogs && blogs.length > 0 ? (blogs.map((blog, index) => {
+                    return (
+                        <tr key={index} className=" text-white bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600">
+                            <th scope="row" className=" text-white px-6 py-4 font-medium   dark:text-white">
+                                {blog.title}
+                            </th>
+                            <td className="px-6 py-4">
+                                {blog.category}
+                            </td>
+                            <td className="px-6 py-4">
+                                {blog.status}
+                            </td>
+                            <td className="px-6 py-4">
+                                {blog.author}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                                <Link href={`/admin/blog/${blog.id}`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</Link>
+                            </td>
+                        </tr>
+
+                    )
+                })) : null}
 
 
                 </tbody>
