@@ -12,9 +12,7 @@ const usePut = (qkey: string) => {
 
     const { mutate: putMutation, isError, isSuccess, data, isPending } = useMutation({
         mutationFn: async (payload: any) => {
-            console.log(payload, 'payload')
             const { data } = await API.put(payload.urls, { ...payload.data });
-            console.log(data, 'hookswala')
             return data;
         },
         onError(error) {
