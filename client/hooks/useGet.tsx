@@ -1,13 +1,10 @@
-
 import { useQuery } from "@tanstack/react-query";
 import API from "@/utils/API";
 
-
-const useGetById = (qkey: string, urls: string, id: string) => {
-    const str = JSON.stringify({ id })
+const useGet = (qkey: string, urls: string, id: string) => {
 
     const { isError, isLoading, data } = useQuery({
-        queryKey: [qkey, str],
+        queryKey: [qkey, id],
         queryFn: async () => {
 
             const { data } = await API.get(`${urls}/${id}`);
@@ -21,7 +18,7 @@ const useGetById = (qkey: string, urls: string, id: string) => {
 };
 
 
-export default useGetById;
+export default useGet;
 
 
 

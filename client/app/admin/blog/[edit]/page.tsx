@@ -1,19 +1,21 @@
 'use client'
 
 import { URLS } from '@/constants'
-import useGetById from '@/hooks/useGet'
+import useGet from '@/hooks/useGet'
 import BlogStore from '@/store/BlogStore'
 import { blogSchemaValidator } from '@/validator/blog.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useRouter } from 'next/router'
 
-function edit() {
-    const { id } = useParams()
-    console.log(id,'iddddddddddddd')
+function Edit() {
+
+    const { id } = useRouter().query;
+
+    console.log(id, 'iddddddddddddd')
     const { blogs, setBlogs } = BlogStore((state) => state);
 
     const [blog, setBlog] = useState({
@@ -40,13 +42,16 @@ function edit() {
         },
     })
 
+    const { data } = useGet('blog_update', URLS.BLOGS, id as any)
     useEffect(() => {
 
-        const { data } = useGetById('blog_update', URLS.BLOGS, id as any )
-        setBlog((prev) => {
-            return { ...prev, ...data }
-        })
-    }, [id, useGetById])
+        if (data) {
+
+            setBlog((prev) => {
+                return { ...prev, ...data }
+            })
+        }
+    }, [id])
 
 
     return (
@@ -101,4 +106,4 @@ function edit() {
     )
 }
 
-export default edit
+export default Edit
