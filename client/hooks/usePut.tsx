@@ -32,4 +32,6 @@ const usePut = (qkey: string) => {
     return { putMutation, isError, isSuccess, data, error, success, isPending }
 
 
+
 }
+export default usePut;
