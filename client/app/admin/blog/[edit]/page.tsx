@@ -9,13 +9,12 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useRouter } from 'next/router'
+import { useParams } from 'next/navigation'
 
 function Edit() {
 
-    const { id } = useRouter().query;
-
-    console.log(id, 'iddddddddddddd')
+    const params = useParams() 
+    const id = params.edit
     const { blogs, setBlogs } = BlogStore((state) => state);
 
     const [blog, setBlog] = useState({

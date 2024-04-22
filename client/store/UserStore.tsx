@@ -43,6 +43,7 @@ export const UserStore = create<UserStoreType>()(
             user: payload.user,
             roles: payload.user.roles || [],
           })),
+          
         setLogOut: () => set(initialUserState), // Reset to initial state on logout
       }),
       {

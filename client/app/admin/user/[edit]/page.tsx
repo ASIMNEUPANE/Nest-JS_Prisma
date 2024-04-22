@@ -1,6 +1,12 @@
+'use client'
 import Link from "next/link"
+import { useParams } from 'next/navigation'
 
 function edit() {
+
+    const params = useParams() 
+    const id = params.edit
+      
     return (
         <div className=" p-4 ">
             <div className='flex justify-center items-center '>
