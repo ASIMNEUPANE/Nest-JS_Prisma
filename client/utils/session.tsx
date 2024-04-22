@@ -1,6 +1,6 @@
 export const setToken = (token: string) => {
   if (typeof window !== "undefined") {
-    localStorage.setItem("access_token", token);
+    window.localStorage.setItem("access_token", token);
     return true;
   }
   return false;
@@ -8,13 +8,13 @@ export const setToken = (token: string) => {
 
 export const getToken = () => {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("access_token");
+    return window.localStorage.getItem("access_token");
   }
   return null;
 };
 
 export const removeToken = () => {
   if (typeof window !== "undefined") {
-    localStorage.removeItem("access_token");
+    window.localStorage.removeItem("access_token");
   }
 };

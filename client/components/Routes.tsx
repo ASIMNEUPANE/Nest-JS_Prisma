@@ -17,7 +17,7 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({ children, role }) => {
   const router = useRouter()
   const isLoggedIn = checkIsLoggedIn();
   const isAdminRole = isAdmin(role);
-  
+
   if (isLoggedIn && isAdminRole) {
     return (
       <>
@@ -29,8 +29,6 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({ children, role }) => {
   } else {
     router.push('/login');
   }
-  
-  
 };
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
@@ -38,7 +36,7 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const router = useRouter()
 
 
-  return <>{(isLoggedIn )   ? router.push('/admin') : children}</>;
+  return <>{(isLoggedIn) ? router.push('/admin') : children}</>;
 };
 
 const isAdmin = (role: string | undefined): boolean => {
@@ -48,7 +46,8 @@ const isAdmin = (role: string | undefined): boolean => {
   console.log(token)
   if (!token) return false;
   // check for access token duration
-  const  {data}  = jwtDecode(token as string);
+  // @ts-ignore
+  const { data } = jwtDecode(token as string);
   console.log('pugyo')
   console.log(data, 'dataSSSSSSSSSSSSSSSSSSSSSS')
   const isValid = data.roles.includes(role);

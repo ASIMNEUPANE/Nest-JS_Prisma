@@ -21,6 +21,20 @@ export default function login() {
   const { postMutation, data, isSuccess, error, isPending } = usePost('')
   const { setIsLoggedIn, isLoggedIn, user, roles } = UserStore((state) => state);
   console.log(roles, 'newroles')
+
+  if (isLoggedIn) {
+
+    // Check if the 'ADMIN' role is included in the roles array
+    if (roles.includes('ADMIN')) {
+      // If user is an admin, redirect to the admin page
+      router.push('/admin');
+    } else {
+      // If user is logged in but not an admin, redirect to the homepage
+      router.push('/');
+    }
+  }
+
+
   const { register, handleSubmit, formState: { errors } } = useForm<login>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -37,28 +51,18 @@ export default function login() {
     }
   }, [data])
 
-
-
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data)
     postMutation({ urls: URLS.AUTH + '/login', data });
-    
+
   }
-  
-  if (isLoggedIn && roles.includes('ADMIN')) {
-    console.log(isLoggedIn, roles, 'login,roles')
-    router.push('/admin')
-  }
-
-
-
 
   if (isPending) {
     return <div className="flex h-screen items-center justify-center">
       <Loader />
     </div>
   }
- 
+
 
   return (
 
