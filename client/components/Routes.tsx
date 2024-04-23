@@ -48,8 +48,6 @@ const isAdmin = (role: string | undefined): boolean => {
   // check for access token duration
   // @ts-ignore
   const { data } = jwtDecode(token as string);
-  console.log('pugyo')
-  console.log(data, 'dataSSSSSSSSSSSSSSSSSSSSSS')
   const isValid = data.roles.includes(role);
   return isValid;
 };
