@@ -10,11 +10,9 @@ import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { redirect, useParams } from 'next/navigation'
 import usePut from '@/hooks/usePut'
-import { useRouter } from 'next/navigation'
 
 
 function Edit() {
-    const router = useRouter()
     type blogType = z.infer<typeof blogSchemaValidator>
 
     const params = useParams()
