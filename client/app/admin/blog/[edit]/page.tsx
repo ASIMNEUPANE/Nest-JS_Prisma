@@ -2,102 +2,118 @@
 
 import { URLS } from '@/constants'
 import useGet from '@/hooks/useGet'
-import BlogStore from '@/store/BlogStore'
 import { blogSchemaValidator } from '@/validator/blog.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
-import { useParams } from 'next/navigation'
+import { redirect, useParams } from 'next/navigation'
+import usePut from '@/hooks/usePut'
+import { useRouter } from 'next/navigation'
+
 
 function Edit() {
+    const router = useRouter()
+    type blogType = z.infer<typeof blogSchemaValidator>
 
-    const params = useParams() 
+    const params = useParams()
     const id = params.edit
-    const { blogs, setBlogs } = BlogStore((state) => state);
 
-    const [blog, setBlog] = useState({
-        title: '',
-        content: '',
-        description: '',
-        category: '',
-        status: '',
-        totalWord: '',
-    })
-    type blogs = z.infer<typeof blogSchemaValidator>
+    const { data } = useGet('blog_update', URLS.BLOGS, id as any)
 
-    const { register, handleSubmit, formState: { errors } } = useForm<blogs>({
+    const { putMutation, error, isPending, success } = usePut('listBlog')
+
+
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<blogType>({
         resolver: zodResolver(blogSchemaValidator),
+
         defaultValues: {
-            title: blog.title,
-            content: blog.content,
-            description: blog.description,
+            title: '',
+            content: '',
+            description: '',
             category: 'TECHNOLOGY',
             status: 'DRAFT',
-            totalWord: '',
-
-
+            author: '',
+            totalWord: 0,
         },
     })
 
-    const { data } = useGet('blog_update', URLS.BLOGS, id as any)
+    const onSubmit = async (data: blogType) => {
+        console.log('click happen')
+
+        console.log(data)
+        console.log(errors);
+        // postMutation({ urls: URLS.AUTH + '/register', data })
+
+        await putMutation({ urls: `${URLS.BLOGS}/${id}`, data });
+
+    }
+    if (success) {
+        redirect('/admin/blog')
+    }
     useEffect(() => {
 
         if (data) {
 
-            setBlog((prev) => {
-                return { ...prev, ...data }
-            })
+            reset({ ...data })
         }
-    }, [id])
+    }, [data, reset])
 
 
     return (
-        <div className=" p-4 ">
+        <div className=" p-4 flex justify-center items-center bg-green-800">
             <div className='flex justify-center items-center '>
-                <form className="  rounded-2xl space-y-6 text-white p-5 bg-gray-800 w-3/4">
+                <form onSubmit={handleSubmit(onSubmit)} className="  rounded-2xl space-y-6 text-white p-5 bg-gray-800 w-3/4">
                     <div className=' pl-52 flex flex-col items-center justify-center w-3/5'>
                         <div className='p-2'  >
                             <div className='pr-2 font-semibold '>icon</div>
                             <input {...register('title')} className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='title' />
+                            {errors.title && <p className="text-red-500">{errors.title.message}</p>}
                         </div>
                         <div className='p-2' >
                             <div className='pr-2 font-semibold'>content</div>
-                            <textarea rows={2} className='bg-white text-black rounded-sm p-2 w-80' placeholder='content' />
+                            <textarea {...register('content')} rows={2} className='bg-white text-black rounded-sm p-2 w-80' placeholder='content' />
+                            {errors.content && <p className="text-red-500">{errors.content.message}</p>}
                         </div>
                         <div className='p-2' >
                             <div className='pr-2 font-semibold'>description</div>
-                            <input className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='description' />
+                            <input {...register('description')} className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='description' />
+                            {errors.description && <p className="text-red-500">{errors.description.message}</p>}
                         </div>
                         <div className='p-2'>
                             <div className='pr-2 font-semibold'>category</div>
-                            <input className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='category' />
+                            <input {...register('category')} className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='category' />
+                            {errors.category && <p className="text-red-500">{errors.category.message}</p>}
                         </div>
                         <div className='p-2' >
                             <div className='pr-2 font-semibold '>status</div>
-                            <input className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='status' />
+                            <input {...register('status')} className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='status' />
+                            {errors.status && <p className="text-red-500">{errors.status.message}</p>}
                         </div>
                         <div className='p-2' >
                             <div className='pr-2 font-semibold'>author</div>
-                            <input className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='author' />
+                            <input {...register('author')} className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='author' readOnly />
+                            {errors.author && <p className="text-red-500">{errors.author.message}</p>}
                         </div>
                         <div className='p-2'>
                             <div className='pr-2 font-semibold'>totalWord</div>
-                            <input className='bg-white text-black rounded-sm p-2 w-80' type="text" placeholder='totalWord' />
+                            <input {...register('totalWord')} className='bg-white text-black rounded-sm p-2 w-80' type="number" placeholder='totalWord' />
+                            {errors.totalWord && <p className="text-red-500">{errors.totalWord.message}</p>}
                         </div>
-                        <div className='p-2'>
+                        {/* <div className='p-2'>
                             <div className='pr-2 font-semibold'>images</div>
-                            <input className='bg-white text-black rounded-sm p-2 w-80' type="file" placeholder='images' />
-                        </div>
-                        <div className='p-2'>
+                            <input  {...register('images')} className='bg-white text-black rounded-sm p-2 w-80' type="file" placeholder='images' />
+                            {errors.images && <p className="text-red-500">{errors.images.message}</p>}
+                        </div>  */}
 
-                            <button type='submit' className=" p-3 w-80 bg-gradient-to-r from-blue-400 to-cyan-200  font-semibold rounded-full ">Edit Blog</button>
-                            <Link className='p-32 ' href={'/admin/user'}>Go Back</Link>
-
-                        </div>
                     </div>
+                    <div className='flex justify-center items-center '>
 
+                        <button type='submit' className=" p-3 w-80 bg-gradient-to-r from-blue-400 to-cyan-200  font-semibold rounded-full ">Edit Blog</button>
+                        <Link className='p-2 ' href={'/admin/blog'}>Go Back</Link>
+                    </div>
+                    {error && <div className="text-red-500">{error}</div>}
 
                 </form>
             </div>

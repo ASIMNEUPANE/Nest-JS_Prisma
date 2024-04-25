@@ -6,6 +6,7 @@ function edit() {
 
     const params = useParams() 
     const id = params.edit
+    console.log(id)
       
     return (
         <div className=" p-4 ">
