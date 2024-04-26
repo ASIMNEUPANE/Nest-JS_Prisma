@@ -11,9 +11,7 @@ const useGet = (qkey: string, urls: string, id: string) => {
 
             return data;
         },
-
     })
-
     return { isError, isLoading, data };
 };
 

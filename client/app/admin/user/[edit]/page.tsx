@@ -28,7 +28,7 @@ function edit() {
             name: " ",
             email: "",
             password: "",
-images:""
+            images: ""
 
 
         }
