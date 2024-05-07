@@ -21,6 +21,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
   const config = new DocumentBuilder()
     .setTitle('Versioning example')
     .setDescription('The Api description')

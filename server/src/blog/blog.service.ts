@@ -11,6 +11,7 @@ export class BlogService {
   async create(createBlogDto: CreateBlogDto): Promise<Iblog> {
     return await this.prisma.blog.create({ data: createBlogDto });
   }
+  
 
   async findAll(
     limit?: number,
